@@ -180,13 +180,13 @@
     </div>
   </section>
 
-  <section aria-label="Texte d'introduction">
-    <h2>Texte d'introduction</h2>
-    <textarea id="intro" placeholder="Mon Cher Confrère,&#10;&#10;J'ai le plaisir de vous adresser en retour l'expédition de …"></textarea>
+  <section aria-label="Texte d’introduction">
+    <h2>Texte d’introduction</h2>
+    <textarea id="intro" placeholder="Mon Cher Confrère,&#10;&#10;J’ai le plaisir de vous adresser en retour l’expédition de …"></textarea>
   </section>
 
-  <section aria-label="Lignes d'honoraires">
-    <h2>Lignes d'honoraires</h2>
+  <section aria-label="Lignes d’honoraires">
+    <h2>Lignes d’honoraires</h2>
     <button type="button" class="btn btn-add" onclick="ajouterLigne()">+ Ajouter une ligne</button>
     <table id="tableLignes">
       <thead>
@@ -222,7 +222,7 @@
   </button>
 
   <p class="footer-note">
-    Place l'image <code>entete-boni.jpg</code> dans le même dossier que ce fichier.  
+    Place l’image <code>entete-boni.jpg</code> dans le même dossier que ce fichier.  
     Ensuite, pousse le projet sur GitHub puis sur Vercel.
   </p>
 </main>
@@ -288,21 +288,13 @@
     entete.src = 'entete-boni.jpg'; // <= TON FICHIER JPG
 
     entete.onload = function () {
-      // 1) Entête pleine largeur A4
-      const pageWidth = 595; // Largeur A4 en points
-      const pageHeight = 842; // Hauteur A4 en points
-      
-      // Calcul des dimensions pour occuper toute la largeur
-      const imgWidth = pageWidth; // Pleine largeur A4
-      const imgHeight = (711 / 2550) * imgWidth; // Conserve le ratio de l'image originale
-      
-      const imgX = 0; // Début à gauche
-      const imgY = 0; // Début en haut
-      
-      doc.addImage(entete, 'JPEG', imgX, imgY, imgWidth, imgHeight);
+      // 1) Entête en haut
+      // Ajuste 40, 20, 520, 90 si besoin (position / taille)
+      doc.addImage(entete, 'JPEG', 0, 0, 595, 165);
 
-      // Point de départ sous l'entête
-      let y = imgHeight + 25; // Espacement après l'image
+
+      // Point de départ sous l’entête
+      let y = 130;
 
       // 2) Infos générales
       doc.setFont('Helvetica', 'normal');
@@ -317,7 +309,7 @@
       doc.text("N° SIRET : " + document.getElementById('siret').value, margeG, y); y += 24;
 
       // 3) Destinataire à droite
-      let destY = imgHeight + 45; // Position sous l'image + marge
+      let destY = 150;
       const dest1 = document.getElementById('destNomLigne1').value;
       const dest2 = document.getElementById('destNomLigne2').value;
       const dest3 = document.getElementById('destNomLigne3').value;
@@ -386,11 +378,6 @@
       // 7) Sauvegarde
       const numFact = document.getElementById('numFacture').value || 'facture';
       doc.save(`facture-${numFact}.pdf`);
-    };
-    
-    // Gestion d'erreur si l'image ne charge pas
-    entete.onerror = function() {
-      alert("Erreur : L'image 'entete-boni.jpg' n'a pas pu être chargée. Vérifiez qu'elle se trouve dans le même dossier.");
     };
   }
 
