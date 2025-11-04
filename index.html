@@ -1195,7 +1195,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
 
       // Décompte en lettres
       if (facture.totalMontant > 0) {
-        doc.setFont('Helvetica', 'normal');
+        doc.setFont('Helvetica', 'bold');
         const montantLettre = nombreEnLettres(facture.totalMontant).toUpperCase();
         const phraseDec =
           `Le décompte laisse apparaître un solde de ${montantLettre} ` +
@@ -1226,5 +1226,6 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
 </script>
 </body>
 </html>
+
 
 
