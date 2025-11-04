@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Facture – Cabinet Maître Boni</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- jsPDF + autotable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f3f4f6;
+    }
+    header {
+      background: #111827;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    main {
+      max-width: 1000px;
+      margin: 1.5rem auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    }
+    h1 {
+      font-size: 1.4rem;
+      margin: 0 0 .5rem;
+    }
+    .subtitle {
+      color: #6b7280;
+      font-size: .9rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    label {
+      font-size: .85rem;
+      font-weight: 600;
+      color: #374151;
+      display: block;
+      margin-bottom: .25rem;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: .5rem .6rem;
+      border-radius: .5rem;
+      border: 1px solid #d1d5db;
+      font-size: .9rem;
+      box-sizing: border-box;
+    }
+    textarea { min-height: 70px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: .5rem;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: .4rem;
+      font-size: .85rem;
+      text-align: left;
+    }
+    th {
+      background: #f9fafb;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: .55rem 1.4rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: .9rem;
+      margin-top: 1rem;
+    }
+    .btn-add {
+      background: #ecfeff;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      margin-bottom: .5rem;
+    }
+    .btn-primary {
+      background: #0f766e;
+      color: white;
+    }
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      font-size: .8rem;
+      padding: .25rem .6rem;
+    }
+    .totaux {
+      text-align: right;
+      margin-top: .75rem;
+      font-size: .9rem;
+    }
+    .totaux span {
+      display: block;
+    }
+    .footer-note {
+      font-size: .75rem;
+      color: #6b7280;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Facture du Cabinet d'Avocat Maître Boni</h1>
+  <div class="subtitle">Génération automatique de facture PDF</div>
+</header>
+
+<main>
+  <section aria-label="Informations générales">
+    <h2 style="font-size:1.1rem;margin-top:0;">Informations générales</h2>
+    <div class="grid">
+      <div>
+        <label for="villeDate">Lieu et date</label>
+        <input id="villeDate" type="text" placeholder="Natitingou, le 24/10/2025">
+      </div>
+      <div>
+        <label for="affaire">Affaire</label>
+        <input id="affaire" type="text" placeholder="DIOME Modou / LEBLOND Jennifer">
+      </div>
+      <div>
+        <label for="nosRef">Nos références</label>
+        <input id="nosRef" type="text" placeholder="Cor : 8257, MD : 133974 - FD">
+      </div>
+      <div>
+        <label for="vosRef">Vos références</label>
+        <input id="vosRef" type="text" placeholder="">
+      </div>
+      <div>
+        <label for="numFacture">Numéro de facture</label>
+        <input id="numFacture" type="text" placeholder="25-10-5639">
+      </div>
+      <div>
+        <label for="tvaNum">TVA intracommunautaire</label>
+        <input id="tvaNum" type="text" value="FRxxxxxxxxxxxxx">
+      </div>
+      <div>
+        <label for="siret">N° SIRET</label>
+        <input id="siret" type="text" value="xxxxxxxxxxxxx">
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Destinataire">
+    <h2 style="font-size:1.1rem;">Destinataire</h2>
+    <div class="grid">
+      <div>
+        <label for="destNomLigne1">Ligne 1</label>
+        <input id="destNomLigne1" type="text" placeholder="Maître XXXXXX">
+      </div>
+      <div>
+        <label for="destNomLigne2">Ligne 2</label>
+        <input id="destNomLigne2" type="text" placeholder="Adresse complète">
+      </div>
+      <div>
+        <label for="destNomLigne3">Ligne 3</label>
+        <input id="destNomLigne3" type="text" placeholder="Code postal – Ville">
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Texte d’introduction">
+    <h2 style="font-size:1.1rem;">Texte d’introduction</h2>
+    <textarea id="intro" placeholder="Mon Cher Confrère,&#10;&#10;J’ai le plaisir de vous adresser en retour l’expédition de …"></textarea>
+  </section>
+
+  <section aria-label="Lignes d’honoraires">
+    <h2 style="font-size:1.1rem;">Lignes d’honoraires</h2>
+    <button type="button" class="btn btn-add" onclick="ajouterLigne()">+ Ajouter une ligne</button>
+    <table id="tableLignes">
+      <thead>
+      <tr>
+        <th>Libellé</th>
+        <th>Date</th>
+        <th>Base HT</th>
+        <th>Exonéré</th>
+        <th>TVA %</th>
+        <th>TVA €</th>
+        <th>TTC</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- lignes JS -->
+      </tbody>
+    </table>
+    <div class="totaux">
+      <span>Total HT : <strong id="totalHT">0,00 €</strong></span>
+      <span>TVA : <strong id="totalTVA">0,00 €</strong></span>
+      <span><strong>Total TTC : <span id="totalTTC">0,00 €</span></strong></span>
+    </div>
+  </section>
+
+  <section aria-label="Texte de clôture">
+    <h2 style="font-size:1.1rem;">Texte de clôture</h2>
+    <textarea id="cloture">Le décompte laisse apparaître un solde dont règlement à vos bons soins.&#10;&#10;Votre bien dévoué.&#10;&#10;Maître Bio Bienvenu BONI</textarea>
+  </section>
+
+  <button type="button" class="btn btn-primary" onclick="genererPDF()">
+    Générer la facture (PDF)
+  </button>
+
+  <p class="footer-note">
+    Astuce : sur Vercel tu peux simplement déposer ce fichier <code>index.html</code> dans un dépôt Git, 
+    créer un projet Vercel et ton générateur de factures sera en ligne.
+  </p>
+</main>
+
+<script>
+  function formatEuro(n) {
+    return n.toFixed(2).replace('.', ',') + ' €';
+  }
+
+  function ajouterLigne(data = {}) {
+    const tbody = document.querySelector('#tableLignes tbody');
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+      <td><input type="text" class="libelle" value="${data.libelle || ''}"></td>
+      <td><input type="text" class="datePresta" value="${data.date || ''}"></td>
+      <td><input type="number" step="0.01" class="baseHT" value="${data.baseHT || ''}" oninput="recalculer()"></td>
+      <td><input type="number" step="0.01" class="exo" value="${data.exo || '0'}" oninput="recalculer()"></td>
+      <td><input type="number" step="0.01" class="tvaPct" value="${data.tvaPct || '20'}" oninput="recalculer()"></td>
+      <td class="tvaMontant">0,00 €</td>
+      <td class="ttcMontant">0,00 €</td>
+      <td><button type="button" class="btn btn-danger" onclick="supprimerLigne(this)">×</button></td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  function supprimerLigne(btn) {
+    btn.closest('tr').remove();
+    recalculer();
+  }
+
+  function recalculer() {
+    let totalHT = 0, totalTVA = 0, totalTTC = 0;
+
+    document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
+      const baseHT = parseFloat(tr.querySelector('.baseHT').value || '0');
+      const exo = parseFloat(tr.querySelector('.exo').value || '0');
+      const tvaPct = parseFloat(tr.querySelector('.tvaPct').value || '0');
+
+      const baseTaxable = Math.max(baseHT - exo, 0);
+      const tva = baseTaxable * (tvaPct / 100);
+      const ttc = baseHT + tva;
+
+      tr.querySelector('.tvaMontant').textContent = formatEuro(tva);
+      tr.querySelector('.ttcMontant').textContent = formatEuro(ttc);
+
+      totalHT += baseHT;
+      totalTVA += tva;
+      totalTTC += ttc;
+    });
+
+    document.getElementById('totalHT').textContent = formatEuro(totalHT);
+    document.getElementById('totalTVA').textContent = formatEuro(totalTVA);
+    document.getElementById('totalTTC').textContent = formatEuro(totalTTC);
+  }
+
+  async function genererPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'A4' });
+
+    const margeG = 50;
+    let y = 40;
+
+    // ENTÊTE CABINET
+    doc.setFont('Helvetica','bold');
+    doc.setFontSize(12);
+    doc.text("Cabinet d'Avocat Maître Boni", margeG, y);
+    y += 14;
+    doc.setFont('Helvetica','normal');
+    doc.text("Droits des étrangers – Droit pénal – Droit du handicap – Droit social", margeG, y);
+    y += 12;
+    doc.text("Case palais : 26", margeG, y); y += 12;
+    doc.text("18-20 Rue du Maréchal Joffre", margeG, y); y += 12;
+    doc.text("Email : contact@maitreboni.fr", margeG, y); y += 12;
+    doc.text("Tél. +229 01 97 10 74 09 – +33 06 87 67 28 32", margeG, y);
+
+    // Destinataire à droite
+    y = 60;
+    const dest1 = document.getElementById('destNomLigne1').value;
+    const dest2 = document.getElementById('destNomLigne2').value;
+    const dest3 = document.getElementById('destNomLigne3').value;
+
+    let xRight = 360;
+    doc.setFont('Helvetica','bold');
+    doc.text(dest1 || "", xRight, y, { align: 'left' });
+    doc.setFont('Helvetica','normal');
+    y += 14;
+    if (dest2) { doc.text(dest2, xRight, y); y += 12; }
+    if (dest3) { doc.text(dest3, xRight, y); y += 12; }
+
+    // Lieu / date & refs
+    y = 150;
+    doc.text(document.getElementById('villeDate').value, margeG, y); y += 18;
+
+    doc.text("Nos réf : " + document.getElementById('nosRef').value, margeG, y); y += 14;
+    doc.text("Affaire : " + document.getElementById('affaire').value, margeG, y); y += 14;
+    doc.text("Vos réf : " + document.getElementById('vosRef').value, margeG, y); y += 14;
+    doc.text("Facture : " + document.getElementById('numFacture').value, margeG, y); y += 14;
+    doc.text("TVA intracommunautaire : " + document.getElementById('tvaNum').value, margeG, y); y += 14;
+    doc.text("N° SIRET : " + document.getElementById('siret').value, margeG, y); y += 24;
+
+    // Intro
+    const intro = document.getElementById('intro').value || "";
+    const introLines = doc.splitTextToSize(intro, 500);
+    doc.text(introLines, margeG, y);
+    y += introLines.length * 14 + 10;
+
+    // Tableau des honoraires
+    const body = [];
+    document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
+      const libelle = tr.querySelector('.libelle').value;
+      const dateP = tr.querySelector('.datePresta').value;
+      const baseHT = parseFloat(tr.querySelector('.baseHT').value || '0');
+      const exo = parseFloat(tr.querySelector('.exo').value || '0');
+      const tvaPct = parseFloat(tr.querySelector('.tvaPct').value || '0');
+      const baseTaxable = Math.max(baseHT - exo, 0);
+      const tvaMontant = baseTaxable * (tvaPct / 100);
+      const ttc = baseHT + tvaMontant;
+      body.push([
+        libelle + (dateP ? " (" + dateP + ")" : ""),
+        baseHT.toFixed(2).replace('.', ','),
+        exo.toFixed(2).replace('.', ','),
+        tvaMontant.toFixed(2).replace('.', ','),
+        ttc.toFixed(2).replace('.', ',')
+      ]);
+    });
+
+    const totalHTText = document.getElementById('totalHT').textContent.replace(' €','');
+    const totalTVAText = document.getElementById('totalTVA').textContent.replace(' €','');
+    const totalTTCText = document.getElementById('totalTTC').textContent.replace(' €','');
+
+    if (body.length > 0) {
+      doc.autoTable({
+        startY: y,
+        head: [['Libellé','Base HT','Exo','TVA','TTC']],
+        body: body,
+        theme: 'grid',
+        styles: { fontSize: 9 },
+        headStyles: { fillColor: [243,244,246] }
+      });
+      y = doc.lastAutoTable.finalY + 10;
+
+      doc.setFont('Helvetica','bold');
+      doc.text(`Total HT : ${totalHTText} €`, 400, y); y += 14;
+      doc.text(`TVA : ${totalTVAText} €`, 400, y); y += 14;
+      doc.text(`Total TTC : ${totalTTCText} €`, 400, y); y += 20;
+    }
+
+    // Clôture
+    doc.setFont('Helvetica','normal');
+    const cloture = document.getElementById('cloture').value || "";
+    const clotureLines = doc.splitTextToSize(cloture, 500);
+    doc.text(clotureLines, margeG, y);
+
+    // Nom du fichier
+    const numFact = document.getElementById('numFacture').value || 'facture';
+    doc.save(`facture-${numFact}.pdf`);
+  }
+
+  // Une ligne par défaut
+  ajouterLigne({
+    libelle: "Assignation en référé TJ",
+    date: "",
+    baseHT: "91.12",
+    exo: "9.96",
+    tvaPct: "20"
+  });
+  recalculer();
+</script>
+</body>
+</html>
