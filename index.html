@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>Facture – Cabinet Maître Boni</title>
+  <title>Factures – Cabinet Maître Boni</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <!-- jsPDF + autotable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -55,7 +55,7 @@
     }
 
     main {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 0 auto 2rem;
       background: radial-gradient(circle at top left, #f9fafb, #ffffff);
       padding: 1.75rem 1.5rem 2rem;
@@ -67,7 +67,7 @@
 
     h2 {
       font-size: 1.05rem;
-      margin-top: 1.5rem;
+      margin-top: 0;
       margin-bottom: .6rem;
       color: #0f172a;
       display: flex;
@@ -80,6 +80,205 @@
       width: 7px;
       height: 7px;
       border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: .55rem 1.4rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: .9rem;
+      gap: .35rem;
+      transition: transform .1s ease, box-shadow .1s ease, background-color .15s ease, color .15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(15, 23, 42, .18);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding-inline: 1.7rem;
+      box-shadow: 0 14px 28px rgba(14,165,233,.45);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-soft {
+      background: #f3f4f6;
+      color: #111827;
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn-danger {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+      font-size: .8rem;
+      padding: .25rem .6rem;
+      box-shadow: none;
+      margin-top: 0;
+    }
+
+    .btn-sm {
+      padding: .35rem .9rem;
+      font-size: .8rem;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .top-bar-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-bar-title span:first-child {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .top-bar-title span:last-child {
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: .5rem;
+      overflow: hidden;
+      border-radius: .7rem;
+      background: white;
+    }
+
+    th, td {
+      border: 1px solid #000;
+      padding: .45rem .55rem;
+      font-size: .83rem;
+      text-align: left;
+      color: #000;
+    }
+
+    th {
+      font-weight: 600;
+      background: #f3f4f6;
+    }
+
+    .dashboard-table td:last-child {
+      text-align: right;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: .1rem .5rem;
+      border-radius: 999px;
+      font-size: .7rem;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      color: #4b5563;
+    }
+
+    /* MODAL */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 850px;
+      max-height: 90vh;
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow:
+        0 30px 60px rgba(15, 23, 42, .45),
+        0 0 0 1px rgba(148, 163, 184, 0.25);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 1rem 1.5rem .5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .modal-body {
+      padding: 1rem 1.5rem 1.2rem;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: .8rem 1.5rem 1.1rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .7rem;
+    }
+
+    .step-indicator {
+      display: flex;
+      gap: .5rem;
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    .step-indicator span {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+    }
+
+    .step-indicator .current {
+      font-weight: 600;
+      color: var(--accent-dark);
+    }
+
+    .step-indicator .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #d1d5db;
+    }
+
+    .step-indicator .current .dot {
       background: var(--accent);
     }
 
@@ -98,7 +297,7 @@
       margin-bottom: .25rem;
     }
 
-    input, textarea, select {
+    input {
       width: 100%;
       padding: .55rem .75rem;
       border-radius: .7rem;
@@ -108,90 +307,52 @@
       transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
     }
 
-    input:focus, textarea:focus, select:focus {
+    input:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 1px rgba(14,165,233,.3);
       background: #ffffff;
     }
 
-    textarea { min-height: 80px; resize: vertical; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: .5rem;
-      overflow: hidden;
-      border-radius: .7rem;
-      box-shadow: 0 0 0 1px rgba(148,163,184,.2);
-      background: white;
-    }
-
-    th, td {
-      border: 1px solid var(--border-subtle);
-      padding: .45rem .55rem;
-      font-size: .83rem;
-      text-align: left;
-    }
-
-    th {
+    .editor-container {
+      border-radius: .8rem;
+      border: 1px solid #d1d5db;
       background: #f9fafb;
-      font-weight: 600;
-      color: #374151;
+      overflow: hidden;
     }
 
-    td:last-child {
-      text-align: center;
-      width: 50px;
+    .editor-toolbar {
+      display: flex;
+      gap: .25rem;
+      padding: .3rem .4rem;
+      border-bottom: 1px solid #e5e7eb;
+      background: #f3f4f6;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      padding: .55rem 1.4rem;
+    .editor-toolbar button {
       border: none;
+      background: transparent;
       cursor: pointer;
-      font-weight: 600;
+      font-size: .85rem;
+      padding: .15rem .4rem;
+      border-radius: .4rem;
+      color: #4b5563;
+    }
+
+    .editor-toolbar button:hover {
+      background: #e5e7eb;
+    }
+
+    .editor {
+      min-height: 140px;
+      max-height: 260px;
+      padding: .55rem .7rem .7rem;
+      overflow-y: auto;
       font-size: .9rem;
-      margin-top: 1rem;
-      gap: .35rem;
-      transition: transform .1s ease, box-shadow .1s ease, background-color .15s ease, color .15s ease;
-      white-space: nowrap;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 18px rgba(15, 23, 42, .18);
-    }
-
-    .btn-add {
-      background: var(--accent-soft);
-      color: var(--accent-dark);
-      border: 1px solid #bae6fd;
-      margin-bottom: .5rem;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-      padding-inline: 1.7rem;
-      box-shadow: 0 14px 28px rgba(14,165,233,.45);
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-dark);
-    }
-
-    .btn-danger {
-      background: var(--danger-soft);
-      color: var(--danger);
-      border: 1px solid #fecaca;
-      font-size: .8rem;
-      padding: .25rem .6rem;
-      box-shadow: none;
-      margin-top: 0;
+    .editor:focus {
+      outline: none;
     }
 
     .totaux {
@@ -226,12 +387,6 @@
       font-size: .75rem;
     }
 
-    .actions-bar {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 1.3rem;
-    }
-
     @media (max-width: 640px) {
       main {
         margin-inline: 0.75rem;
@@ -240,118 +395,325 @@
       header h1 {
         font-size: 1.3rem;
       }
+      .modal {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 <header>
-  <h1>Facture – Cabinet d'Avocat Maître Boni</h1>
-  <div class="subtitle">Générateur de factures PDF</div>
+  <h1>Factures – Cabinet d'Avocat Maître Boni</h1>
+  <div class="subtitle">Tableau de bord et génération de factures PDF</div>
 </header>
 
 <main>
-  <section aria-label="Informations générales">
-    <h2>Informations générales</h2>
-    <div class="grid">
-      <div>
-        <label for="villeDate">Lieu et date</label>
-        <input id="villeDate" type="text" placeholder="Bordeaux, le JJ/MM/AAAA">
-      </div>
-      <div>
-        <label for="affaire">Affaire</label>
-        <input id="affaire" type="text" placeholder="DIOME Modou / LEBLOND Jennifer">
-      </div>
-      <div>
-        <label for="nosRef">Nos références</label>
-        <input id="nosRef" type="text" placeholder="Cor : 8257, MD : 133974 - FD">
-      </div>
-      <div>
-        <label for="vosRef">Vos références</label>
-        <input id="vosRef" type="text" placeholder="">
-      </div>
-      <div>
-        <label for="numFacture">Numéro de facture</label>
-        <input id="numFacture" type="text" placeholder="FAC-AAAAMMJJ-XXX">
-      </div>
-      <div>
-        <label for="tvaNum">TVA intracommunautaire</label>
-        <input id="tvaNum" type="text" value="Cabinet non assujetti à la TVA" disabled>
-      </div>
-      <div>
-        <label for="siret">N° SIRET</label>
-        <input id="siret" type="text" value="xxxxxxxxxxxxx">
-      </div>
+  <div class="top-bar">
+    <div class="top-bar-title">
+      <span>Tableau de bord des factures</span>
+      <span>Historique local (navigateur) des factures générées</span>
     </div>
-  </section>
-
-  <section aria-label="Destinataire">
-    <h2>Destinataire</h2>
-    <div class="grid">
-      <div>
-        <label for="destNomLigne1">Ligne 1</label>
-        <input id="destNomLigne1" type="text" placeholder="Maître XXXXXX">
-      </div>
-      <div>
-        <label for="destNomLigne2">Ligne 2</label>
-        <input id="destNomLigne2" type="text" placeholder="Adresse complète">
-      </div>
-      <div>
-        <label for="destNomLigne3">Ligne 3</label>
-        <input id="destNomLigne3" type="text" placeholder="Code postal – Ville">
-      </div>
-    </div>
-  </section>
-
-  <section aria-label="Texte d’introduction">
-    <h2>Texte d’introduction</h2>
-    <textarea id="intro" placeholder="Mon Cher Confrère,&#10;&#10;J’ai le plaisir de vous adresser en retour l’expédition de …"></textarea>
-  </section>
-
-  <section aria-label="Lignes d’honoraires">
-    <h2>Lignes d’honoraires (HT – TVA non applicable)</h2>
-    <button type="button" class="btn btn-add" onclick="ajouterLigne()">+ Ajouter une ligne</button>
-    <table id="tableLignes">
-      <thead>
-      <tr>
-        <th>Libellé</th>
-        <th>Date</th>
-        <th>Montant (€)</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- lignes JS -->
-      </tbody>
-    </table>
-    <div class="totaux">
-      <span>Total (TVA non applicable) :</span>
-      <span id="totalGlobal">0,00 €</span>
-    </div>
-  </section>
-
-  <section aria-label="Texte de clôture">
-    <h2>Texte de clôture</h2>
-    <textarea id="cloture">Votre bien dévoué.</textarea>
-  </section>
-
-  <div class="actions-bar">
-    <button type="button" class="btn btn-primary" onclick="genererPDF()">
-      Générer la facture (PDF)
+    <button type="button" class="btn btn-primary" onclick="ouvrirModal()">
+      + Nouvelle facture
     </button>
   </div>
 
+  <section aria-label="Liste des factures">
+    <table class="dashboard-table">
+      <thead>
+      <tr>
+        <th>Numéro</th>
+        <th>Date</th>
+        <th>Affaire</th>
+        <th>Destinataire</th>
+        <th>Montant</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="tbodyFactures">
+      <!-- Lignes remplies en JS -->
+      </tbody>
+    </table>
+  </section>
+
   <p class="footer-note">
-    Place l’image <code>entete-boni.jpg</code> dans le même dossier que ce fichier.  
-    Ensuite, pousse le projet sur GitHub puis sur Vercel.
+    Les factures sont stockées dans le <em>localStorage</em> du navigateur.  
+    Place l’image <code>entete-boni.jpg</code> dans le même dossier que ce fichier, puis déploie sur GitHub / Vercel.
   </p>
 </main>
 
+<!-- MODAL CREATION FACTURE -->
+<div class="modal-backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-header">
+      <h3 id="modalTitle">Nouvelle facture</h3>
+      <button type="button" class="btn btn-soft btn-sm" onclick="fermerModal()">Fermer</button>
+    </div>
+    <div class="modal-body">
+      <div class="step-indicator">
+        <span class="current" id="stepLabel1"><span class="dot"></span> Étape 1 : Infos</span>
+        <span id="stepLabel2"><span class="dot"></span> Étape 2 : Honoraires</span>
+        <span id="stepLabel3"><span class="dot"></span> Étape 3 : Texte</span>
+        <span id="stepLabel4"><span class="dot"></span> Étape 4 : Vérification</span>
+      </div>
+
+      <!-- Étape 1 -->
+      <div class="step" id="step1">
+        <h2>Informations générales</h2>
+        <div class="grid">
+          <div>
+            <label for="affaire">Affaire</label>
+            <input id="affaire" type="text" placeholder="DIOME Modou / LEBLOND Jennifer">
+          </div>
+          <div>
+            <label for="nosRef">Nos références</label>
+            <input id="nosRef" type="text" placeholder="Cor : 8257, MD : 133974 - FD">
+          </div>
+          <div>
+            <label for="vosRef">Vos références</label>
+            <input id="vosRef" type="text" placeholder="">
+          </div>
+        </div>
+
+        <h2>Destinataire</h2>
+        <div class="grid">
+          <div>
+            <label for="destNomLigne1">Ligne 1 (ex : Monsieur le Directeur …)</label>
+            <input id="destNomLigne1" type="text" placeholder="Monsieur le Directeur de …">
+          </div>
+          <div>
+            <label for="destNomLigne2">Ligne 2</label>
+            <input id="destNomLigne2" type="text" placeholder="Adresse complète">
+          </div>
+          <div>
+            <label for="destNomLigne3">Ligne 3</label>
+            <input id="destNomLigne3" type="text" placeholder="Code postal – Ville">
+          </div>
+        </div>
+      </div>
+
+      <!-- Étape 2 -->
+      <div class="step" id="step2" style="display:none">
+        <h2>Lignes d’honoraires</h2>
+        <button type="button" class="btn btn-soft btn-sm" onclick="ajouterLigne()">
+          + Ajouter une ligne
+        </button>
+        <table id="tableLignes">
+          <thead>
+          <tr>
+            <th>Libellé</th>
+            <th>Date</th>
+            <th>Montant (€)</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- lignes JS -->
+          </tbody>
+        </table>
+        <div class="totaux">
+          <span>Total :</span>
+          <span id="totalGlobal">0,00 €</span>
+        </div>
+      </div>
+
+      <!-- Étape 3 -->
+      <div class="step" id="step3" style="display:none">
+        <h2>Texte de la lettre</h2>
+        <p style="font-size:.8rem;color:var(--text-muted);margin-top:-.2rem;margin-bottom:.4rem;">
+          Vous pouvez mettre du gras, italique, listes… comme dans un petit Word.
+        </p>
+        <div class="editor-container">
+          <div class="editor-toolbar">
+            <button type="button" onclick="execCmd('bold')"><b>B</b></button>
+            <button type="button" onclick="execCmd('italic')"><i>I</i></button>
+            <button type="button" onclick="execCmd('underline')"><u>U</u></button>
+            <button type="button" onclick="execCmd('insertUnorderedList')">• Liste</button>
+            <button type="button" onclick="execCmd('insertOrderedList')">1. Liste</button>
+          </div>
+          <div id="editorTexte" class="editor" contenteditable="true">
+Mon Cher Confrère,
+
+J’ai le plaisir de vous adresser en retour l’expédition de …
+          </div>
+        </div>
+      </div>
+
+      <!-- Étape 4 -->
+      <div class="step" id="step4" style="display:none">
+        <h2>Vérification & récapitulatif</h2>
+        <div id="recap" style="font-size:.88rem;line-height:1.5;">
+          <!-- Récapitulatif injecté en JS -->
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-soft btn-sm" id="btnPrev" onclick="changerEtape(-1)" disabled>Étape précédente</button>
+      <div style="display:flex;gap:.5rem;">
+        <span class="badge" id="badgeAuto"></span>
+        <button type="button" class="btn btn-primary btn-sm" id="btnNext" onclick="changerEtape(1)">Étape suivante</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+  const STORAGE_KEY = 'factures_boni';
+  const SIRET = 'xxxxxxxxxxxxx'; // À adapter une fois pour toutes
+  let factures = [];
+  let currentStep = 1;
   let totalGlobal = 0;
+
+  /* ---------- UTIL LOCALSTORAGE ---------- */
+
+  function chargerFactures() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      factures = raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      factures = [];
+    }
+  }
+
+  function sauvegarderFactures() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(factures));
+  }
 
   function formatEuro(n) {
     return n.toFixed(2).replace('.', ',') + ' €';
   }
+
+  function rafraichirTableau() {
+    const tbody = document.getElementById('tbodyFactures');
+    tbody.innerHTML = '';
+    if (!factures.length) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 6;
+      td.textContent = "Aucune facture enregistrée pour le moment.";
+      td.style.textAlign = 'center';
+      td.style.fontSize = '.85rem';
+      td.style.color = '#6b7280';
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    factures.slice().reverse().forEach(f => {
+      const tr = document.createElement('tr');
+
+      const tdNum = document.createElement('td');
+      tdNum.textContent = f.numero;
+
+      const tdDate = document.createElement('td');
+      tdDate.textContent = f.dateTexte;
+
+      const tdAff = document.createElement('td');
+      tdAff.textContent = f.affaire || '';
+
+      const tdDest = document.createElement('td');
+      tdDest.textContent = (f.dest1 || '') + (f.dest3 ? ' – ' + f.dest3 : '');
+
+      const tdMontant = document.createElement('td');
+      tdMontant.textContent = formatEuro(f.totalMontant || 0);
+
+      const tdAct = document.createElement('td');
+      tdAct.style.textAlign = 'right';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-soft btn-sm';
+      btn.textContent = 'PDF';
+      btn.onclick = () => genererPDF(f);
+      tdAct.appendChild(btn);
+
+      tr.appendChild(tdNum);
+      tr.appendChild(tdDate);
+      tr.appendChild(tdAff);
+      tr.appendChild(tdDest);
+      tr.appendChild(tdMontant);
+      tr.appendChild(tdAct);
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ---------- MODAL & ÉTAPES ---------- */
+
+  function ouvrirModal() {
+    document.getElementById('backdrop').classList.add('show');
+    currentStep = 1;
+    majEtapes();
+    resetForm();
+  }
+
+  function fermerModal() {
+    document.getElementById('backdrop').classList.remove('show');
+  }
+
+  function changerEtape(delta) {
+    const newStep = currentStep + delta;
+    if (newStep < 1 || newStep > 4) return;
+    currentStep = newStep;
+    if (currentStep === 4) {
+      construireRecapitulatif();
+    }
+    majEtapes();
+  }
+
+  function majEtapes() {
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('step' + i).style.display = (i === currentStep) ? 'block' : 'none';
+      const lbl = document.getElementById('stepLabel' + i);
+      if (i === currentStep) lbl.classList.add('current'); else lbl.classList.remove('current');
+    }
+    document.getElementById('btnPrev').disabled = (currentStep === 1);
+    const btnNext = document.getElementById('btnNext');
+    if (currentStep < 4) {
+      btnNext.textContent = 'Étape suivante';
+      btnNext.onclick = () => changerEtape(1);
+    } else {
+      btnNext.textContent = 'Enregistrer et générer le PDF';
+      btnNext.onclick = () => enregistrerEtGenerer();
+    }
+
+    const now = new Date();
+    const jj = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const aaaa = now.getFullYear();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+
+    const dateTexte = `Bordeaux, le ${jj}/${mm}/${aaaa}`;
+    const numero = `FAC-${aaaa}${mm}${jj}-${hh}${min}`;
+    const badge = document.getElementById('badgeAuto');
+    badge.textContent = `Date : ${dateTexte} – N° : ${numero}`;
+  }
+
+  function resetForm() {
+    document.getElementById('affaire').value = '';
+    document.getElementById('nosRef').value = '';
+    document.getElementById('vosRef').value = '';
+    document.getElementById('destNomLigne1').value = '';
+    document.getElementById('destNomLigne2').value = '';
+    document.getElementById('destNomLigne3').value = '';
+    document.getElementById('editorTexte').innerHTML =
+`Mon Cher Confrère,
+
+J’ai le plaisir de vous adresser en retour l’expédition de …`;
+
+    // Reset lignes
+    const tbody = document.querySelector('#tableLignes tbody');
+    tbody.innerHTML = '';
+    ajouterLigne({
+      libelle: "Honoraires – Assignation en référé TJ",
+      date: "",
+      montant: "91.12"
+    });
+    recalculer();
+  }
+
+  /* ---------- LIGNES HONORAIRES ---------- */
 
   function ajouterLigne(data = {}) {
     const tbody = document.querySelector('#tableLignes tbody');
@@ -364,6 +726,7 @@
       <td><button type="button" class="btn btn-danger" onclick="supprimerLigne(this)">×</button></td>
     `;
     tbody.appendChild(tr);
+    recalculer();
   }
 
   function supprimerLigne(btn) {
@@ -373,21 +736,117 @@
 
   function recalculer() {
     let total = 0;
-
     document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
-      const montant = parseFloat(tr.querySelector('.montant').value.replace(',', '.') || '0');
-      if (!isNaN(montant)) {
-        total += montant;
-      }
+      const input = tr.querySelector('.montant');
+      if (!input) return;
+      const val = (input.value || '').toString().replace(',', '.');
+      const montant = parseFloat(val || '0');
+      if (!isNaN(montant)) total += montant;
     });
-
     totalGlobal = total;
     document.getElementById('totalGlobal').textContent = formatEuro(totalGlobal);
   }
 
-  // Conversion nombre -> texte (français, simplifié mais correct pour la facture)
+  /* ---------- ÉDITEUR DE TEXTE ---------- */
+
+  function execCmd(cmd) {
+    document.execCommand(cmd, false, null);
+  }
+
+  function getTexteBrutDepuisHTML(html) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.innerText || tmp.textContent || '';
+  }
+
+  /* ---------- RECAP & ENREGISTREMENT ---------- */
+
+  function construireRecapitulatif() {
+    const affaire = document.getElementById('affaire').value;
+    const nosRef = document.getElementById('nosRef').value;
+    const vosRef = document.getElementById('vosRef').value;
+    const dest1 = document.getElementById('destNomLigne1').value;
+    const dest2 = document.getElementById('destNomLigne2').value;
+    const dest3 = document.getElementById('destNomLigne3').value;
+    const texteHTML = document.getElementById('editorTexte').innerHTML;
+
+    const recap = document.getElementById('recap');
+    recap.innerHTML = `
+      <p><strong>Affaire :</strong> ${affaire || '-'}</p>
+      <p><strong>Nos réf :</strong> ${nosRef || '-'}<br>
+      <strong>Vos réf :</strong> ${vosRef || '-'}</p>
+      <p><strong>Destinataire :</strong><br>
+      ${(dest1 || '')}<br>${(dest2 || '')}<br>${(dest3 || '')}</p>
+      <p><strong>Nombre de lignes d’honoraires :</strong> ${document.querySelectorAll('#tableLignes tbody tr').length}</p>
+      <p><strong>Total :</strong> ${formatEuro(totalGlobal)}</p>
+      <p><strong>Texte de la lettre :</strong><br>
+      <div style="border:1px solid #e5e7eb;border-radius:.5rem;padding:.4rem .5rem;background:#f9fafb;max-height:160px;overflow:auto;font-size:.86rem;">
+      ${texteHTML}
+      </div></p>
+    `;
+  }
+
+  function enregistrerEtGenerer() {
+    const now = new Date();
+    const jj = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const aaaa = now.getFullYear();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const min = String(now.getMinutes()).padStart(2, '0');
+
+    const dateTexte = `Bordeaux, le ${jj}/${mm}/${aaaa}`;
+    const numero = `FAC-${aaaa}${mm}${jj}-${hh}${min}`;
+
+    const affaire = document.getElementById('affaire').value;
+    const nosRef = document.getElementById('nosRef').value;
+    const vosRef = document.getElementById('vosRef').value;
+    const dest1 = document.getElementById('destNomLigne1').value;
+    const dest2 = document.getElementById('destNomLigne2').value;
+    const dest3 = document.getElementById('destNomLigne3').value;
+    const texteHTML = document.getElementById('editorTexte').innerHTML;
+    const texteBrut = getTexteBrutDepuisHTML(texteHTML);
+
+    const lignes = [];
+    document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
+      const libelle = tr.querySelector('.libelle')?.value || '';
+      const dateP = tr.querySelector('.datePresta')?.value || '';
+      const val = (tr.querySelector('.montant')?.value || '').toString().replace(',', '.');
+      const montant = parseFloat(val || '0');
+      lignes.push({
+        libelle,
+        date: dateP,
+        montant: isNaN(montant) ? 0 : montant
+      });
+    });
+
+    const facture = {
+      id: Date.now(),
+      numero,
+      dateTexte,
+      affaire,
+      nosRef,
+      vosRef,
+      dest1,
+      dest2,
+      dest3,
+      texteHTML,
+      texteBrut,
+      lignes,
+      totalMontant: totalGlobal,
+      siret: SIRET
+    };
+
+    factures.push(facture);
+    sauvegarderFactures();
+    rafraichirTableau();
+    genererPDF(facture);
+    fermerModal();
+  }
+
+  /* ---------- NOMBRE EN LETTRES (FR) ---------- */
+
   function nombreEnLettres(n) {
-    n = Math.round(n * 100) / 100; // 2 décimales max
+    n = Math.round(n * 100) / 100;
     const euros = Math.floor(n);
     const cents = Math.round((n - euros) * 100);
 
@@ -401,16 +860,15 @@
         const d = Math.floor(x / 10);
         const u = x % 10;
         if (u === 0) return dizaines[d];
-        if (u === 1 && (d === 2 || d === 3 || d === 4 || d === 5 || d === 6))
-          return dizaines[d] + '-et-un';
+        if (u === 1 && (d >= 2 && d <= 6)) return dizaines[d] + '-et-un';
         return dizaines[d] + '-' + unites[u];
       }
-      if (x < 80) { // 70-79
+      if (x < 80) {
         const u = x - 60;
         if (u === 1) return 'soixante-et-onze';
         return 'soixante-' + enLettresEntier(u);
       }
-      if (x < 100) { // 80-99
+      if (x < 100) {
         const u = x - 80;
         let base = 'quatre-vingt';
         if (u === 0) return base + 's';
@@ -447,173 +905,145 @@
     }
 
     let texte = '';
-    if (euros === 0) {
-      texte = 'zéro euro';
-    } else if (euros === 1) {
-      texte = 'un euro';
-    } else {
-      texte = enLettresEntier(euros) + ' euros';
-    }
+    if (euros === 0) texte = 'zéro euro';
+    else if (euros === 1) texte = 'un euro';
+    else texte = enLettresEntier(euros) + ' euros';
 
     if (cents > 0) {
-      if (cents === 1) {
-        texte += ' et un centime';
-      } else {
-        texte += ' et ' + enLettresEntier(cents) + ' centimes';
-      }
+      if (cents === 1) texte += ' et un centime';
+      else texte += ' et ' + enLettresEntier(cents) + ' centimes';
     }
 
     return texte;
   }
 
-  function genererPDF() {
+  /* ---------- GENERATION PDF ---------- */
+
+  function genererPDF(facture) {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: 'pt', format: 'A4' }); // ~595 x 842 pts
+    const doc = new jsPDF({ unit: 'pt', format: 'A4' }); // 595 x 842 pts approx
     const margeG = 50;
 
     const entete = new Image();
-    entete.src = 'entete-boni.jpg'; // <= TON FICHIER JPG
+    entete.src = 'entete-boni.jpg'; // ENTÊTE INCHANGÉE
 
     entete.onload = function () {
-      // 1) Entête en haut (ON NE TOUCHE PAS)
+      // Image d'entête inchangée
       doc.addImage(entete, 'JPEG', 0, 0, 595, 165);
 
-      // Point de départ sous l’entête
-      let y = 140;
+      // On pousse le contenu bien plus bas pour ne pas rentrer dans l'image
+      let y = 200;
 
-      // 2) Titre de la facture
-      const numFact = document.getElementById('numFacture').value || 'sans-numero';
+      // Titre centré
       doc.setFont('Helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.text(`FACTURE N° ${numFact}`, margeG, y);
-      y += 20;
+      doc.setFontSize(14);
+      doc.text(`FACTURE N° ${facture.numero}`, 595 / 2, y, { align: 'center' });
+      y += 30;
 
       doc.setFont('Helvetica', 'normal');
       doc.setFontSize(11);
 
-      // 3) Infos générales (à gauche)
-      doc.text(document.getElementById('villeDate').value, margeG, y); y += 18;
-      doc.text("Nos réf : " + (document.getElementById('nosRef').value || ''), margeG, y); y += 14;
-      doc.text("Affaire : " + (document.getElementById('affaire').value || ''), margeG, y); y += 14;
-      doc.text("Vos réf : " + (document.getElementById('vosRef').value || ''), margeG, y); y += 14;
-      doc.text("N° SIRET : " + (document.getElementById('siret').value || ''), margeG, y); y += 24;
-      doc.text("TVA : non applicable (cabinet non assujetti)", margeG, y); y += 24;
-
-      // 4) Destinataire à droite
-      let destY = 160;
-      const dest1 = document.getElementById('destNomLigne1').value;
-      const dest2 = document.getElementById('destNomLigne2').value;
-      const dest3 = document.getElementById('destNomLigne3').value;
-
-      const xRight = 400;
-      if (dest1 || dest2 || dest3) {
+      // Bloc destinataire à droite (sans "À l'attention de")
+      let destY = y;
+      const xRight = 380;
+      if (facture.dest1 || facture.dest2 || facture.dest3) {
         doc.setFont('Helvetica', 'bold');
-        doc.text("À l'attention de :", xRight, destY); destY += 14;
-        if (dest1) {
-          doc.text(dest1, xRight, destY);
+        if (facture.dest1) {
+          doc.text(facture.dest1, xRight, destY);
           destY += 14;
         }
         doc.setFont('Helvetica', 'normal');
-        if (dest2) { doc.text(dest2, xRight, destY); destY += 12; }
-        if (dest3) { doc.text(dest3, xRight, destY); destY += 12; }
+        if (facture.dest2) {
+          doc.text(facture.dest2, xRight, destY);
+          destY += 12;
+        }
+        if (facture.dest3) {
+          doc.text(facture.dest3, xRight, destY);
+          destY += 12;
+        }
       }
 
-      // 5) Introduction
-      const intro = document.getElementById('intro').value || "";
-      const introLines = doc.splitTextToSize(intro, 500);
-      doc.text(introLines, margeG, y);
-      y += introLines.length * 14 + 12;
+      // Date juste en dessous du destinataire
+      destY += 16;
+      doc.text(facture.dateTexte, xRight, destY);
 
-      // 6) Tableau des honoraires (sans TVA)
+      // Infos générales en dessous à gauche
+      let yInfos = destY + 24;
+      doc.text("Nos réf : " + (facture.nosRef || ''), margeG, yInfos); yInfos += 14;
+      doc.text("Affaire : " + (facture.affaire || ''), margeG, yInfos); yInfos += 14;
+      doc.text("Vos réf : " + (facture.vosRef || ''), margeG, yInfos); yInfos += 14;
+      doc.text("N° SIRET : " + (facture.siret || ''), margeG, yInfos); yInfos += 24;
+
+      let yCourant = yInfos;
+
+      // Texte de la lettre
+      const texteIntro = facture.texteBrut || "";
+      const introLines = doc.splitTextToSize(texteIntro, 500);
+      doc.text(introLines, margeG, yCourant);
+      yCourant += introLines.length * 14 + 12;
+
+      // Tableau des honoraires
       const body = [];
-      document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
-        const libelle = tr.querySelector('.libelle').value;
-        const dateP = tr.querySelector('.datePresta').value;
-        const montant = parseFloat(tr.querySelector('.montant').value.replace(',', '.') || '0');
+      (facture.lignes || []).forEach(l => {
+        const libelle = l.libelle || '';
+        const dateP = l.date || '';
+        const montant = l.montant || 0;
         body.push([
           libelle + (dateP ? " (" + dateP + ")" : ""),
-          isNaN(montant) ? "0,00" : montant.toFixed(2).replace('.', ',')
+          montant.toFixed(2).replace('.', ',')
         ]);
       });
 
-      const totalTexte = document.getElementById('totalGlobal').textContent.replace(' €', '');
-      const totalNombre = totalGlobal;
-
       if (body.length > 0) {
         doc.autoTable({
-          startY: y,
+          startY: yCourant,
           head: [['Libellé', 'Montant (€)']],
           body: body,
           theme: 'grid',
-          styles: { fontSize: 9 },
-          headStyles: { fillColor: [243, 244, 246] }
+          styles: {
+            fontSize: 9,
+            lineColor: [0,0,0],
+            textColor: [0,0,0]
+          },
+          headStyles: {
+            fillColor: [243, 244, 246],
+            textColor: [0,0,0],
+            lineColor: [0,0,0]
+          }
         });
-        y = doc.lastAutoTable.finalY + 12;
+        yCourant = doc.lastAutoTable.finalY + 12;
 
         doc.setFont('Helvetica', 'bold');
-        doc.text(`Total (TVA non applicable) : ${totalTexte} €`, 350, y);
-        y += 20;
+        doc.text(`Total : ${facture.totalMontant.toFixed(2).replace('.', ',')} €`, 350, yCourant);
+        yCourant += 20;
       }
 
-      // 7) Décompte automatique en lettres
-      if (totalNombre > 0) {
+      // Décompte autom. en lettres
+      if (facture.totalMontant > 0) {
         doc.setFont('Helvetica', 'normal');
-        const montantLettre = nombreEnLettres(totalNombre).toUpperCase();
-        const phraseDec = `Le décompte laisse apparaître un solde de ${montantLettre} (${totalTexte} €), dont règlement à vos bons soins.`;
+        const montantLettre = nombreEnLettres(facture.totalMontant).toUpperCase();
+        const phraseDec = `Le décompte laisse apparaître un solde de ${montantLettre} (${facture.totalMontant.toFixed(2).replace('.', ',')} €), dont règlement à vos bons soins.`;
         const decLines = doc.splitTextToSize(phraseDec, 500);
-        doc.text(decLines, margeG, y);
-        y += decLines.length * 14 + 14;
-      }
-
-      // 8) Texte de clôture + signature à droite
-      const cloture = document.getElementById('cloture').value || "";
-      if (cloture.trim() !== "") {
-        const clotureLines = doc.splitTextToSize(cloture, 500);
-        doc.text(clotureLines, margeG, y);
-        y += clotureLines.length * 14 + 28;
-      } else {
-        y += 20;
+        doc.text(decLines, margeG, yCourant);
+        yCourant += decLines.length * 14 + 24;
       }
 
       // Signature à droite
       doc.setFont('Helvetica', 'bold');
-      doc.text("Maître Bio Bienvenu BONI", 545, y, { align: 'right' });
+      doc.text("Maître Bio Bienvenu BONI", 545, yCourant, { align: 'right' });
+      yCourant += 14;
+      doc.setFont('Helvetica', 'normal');
+      doc.text("Avocat au barreau de Bordeaux", 545, yCourant, { align: 'right' });
 
-      // 9) Sauvegarde
-      doc.save(`facture-${numFact}.pdf`);
+      doc.save(`facture-${facture.numero}.pdf`);
     };
   }
 
-  // Initialisation automatique (date + numéro de facture + ligne test)
+  /* ---------- INIT ---------- */
+
   document.addEventListener('DOMContentLoaded', () => {
-    // Date & lieu automatiques (Bordeaux)
-    const now = new Date();
-    const jj = String(now.getDate()).padStart(2, '0');
-    const mm = String(now.getMonth() + 1).padStart(2, '0');
-    const aaaa = now.getFullYear();
-    const dateTexte = `Bordeaux, le ${jj}/${mm}/${aaaa}`;
-
-    const villeDateInput = document.getElementById('villeDate');
-    if (!villeDateInput.value) {
-      villeDateInput.value = dateTexte;
-    }
-
-    // Numéro de facture automatique si vide
-    const numFactureInput = document.getElementById('numFacture');
-    if (!numFactureInput.value) {
-      const hh = String(now.getHours()).padStart(2, '0');
-      const min = String(now.getMinutes()).padStart(2, '0');
-      const numAuto = `FAC-${aaaa}${mm}${jj}-${hh}${min}`;
-      numFactureInput.value = numAuto;
-    }
-
-    // Une ligne par défaut pour tester
-    ajouterLigne({
-      libelle: "Honoraires – Assignation en référé TJ",
-      date: "",
-      montant: "91.12"
-    });
-    recalculer();
+    chargerFactures();
+    rafraichirTableau();
   });
 </script>
 </body>
