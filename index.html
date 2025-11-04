@@ -8,75 +8,143 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <style>
+    :root {
+      --bg-page: #020617;
+      --bg-main: #ffffff;
+      --accent: #0ea5e9;
+      --accent-soft: #e0f2fe;
+      --accent-dark: #0369a1;
+      --danger-soft: #fee2e2;
+      --danger: #b91c1c;
+      --border-subtle: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --radius-xl: 0.9rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
       padding: 0;
-      background: #f3f4f6;
+      background:
+        radial-gradient(circle at top left, #0f172a, #020617 55%),
+        radial-gradient(circle at bottom right, #0b1120, #020617 60%);
+      color: var(--text-main);
+      min-height: 100vh;
     }
+
     header {
-      background: #111827;
-      color: white;
-      padding: 1.5rem;
+      padding: 1.7rem 1rem 1rem;
       text-align: center;
+      color: #e5e7eb;
     }
-    main {
-      max-width: 1000px;
-      margin: 1.5rem auto;
-      background: white;
-      padding: 1.5rem;
-      border-radius: 0.75rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+
+    header h1 {
+      font-size: 1.6rem;
+      margin: 0 0 .4rem;
+      letter-spacing: .04em;
     }
-    h1 {
-      font-size: 1.4rem;
-      margin: 0 0 .5rem;
-    }
-    .subtitle {
-      color: #6b7280;
+
+    header .subtitle {
+      color: #9ca3af;
       font-size: .9rem;
     }
-    h2 {
-      font-size: 1.1rem;
-      margin-top: 1rem;
-      margin-bottom: .5rem;
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto 2rem;
+      background: radial-gradient(circle at top left, #f9fafb, #ffffff);
+      padding: 1.75rem 1.5rem 2rem;
+      border-radius: var(--radius-xl);
+      box-shadow:
+        0 30px 60px rgba(15, 23, 42, .40),
+        0 0 0 1px rgba(148, 163, 184, 0.15);
     }
+
+    h2 {
+      font-size: 1.05rem;
+      margin-top: 1.5rem;
+      margin-bottom: .6rem;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    h2::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
       gap: 1rem;
       margin-bottom: 1rem;
     }
+
     label {
-      font-size: .85rem;
+      font-size: .8rem;
       font-weight: 600;
       color: #374151;
       display: block;
       margin-bottom: .25rem;
     }
+
     input, textarea, select {
       width: 100%;
-      padding: .5rem .6rem;
-      border-radius: .5rem;
+      padding: .55rem .75rem;
+      border-radius: .7rem;
       border: 1px solid #d1d5db;
       font-size: .9rem;
-      box-sizing: border-box;
+      background: #f9fafb;
+      transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
     }
-    textarea { min-height: 70px; }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(14,165,233,.3);
+      background: #ffffff;
+    }
+
+    textarea { min-height: 80px; resize: vertical; }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: .5rem;
+      overflow: hidden;
+      border-radius: .7rem;
+      box-shadow: 0 0 0 1px rgba(148,163,184,.2);
+      background: white;
     }
+
     th, td {
-      border: 1px solid #e5e7eb;
-      padding: .4rem;
-      font-size: .85rem;
+      border: 1px solid var(--border-subtle);
+      padding: .45rem .55rem;
+      font-size: .83rem;
       text-align: left;
     }
+
     th {
       background: #f9fafb;
+      font-weight: 600;
+      color: #374151;
     }
+
+    td:last-child {
+      text-align: center;
+      width: 50px;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -88,42 +156,96 @@
       font-weight: 600;
       font-size: .9rem;
       margin-top: 1rem;
+      gap: .35rem;
+      transition: transform .1s ease, box-shadow .1s ease, background-color .15s ease, color .15s ease;
+      white-space: nowrap;
     }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(15, 23, 42, .18);
+    }
+
     .btn-add {
-      background: #ecfeff;
-      color: #0369a1;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
       border: 1px solid #bae6fd;
       margin-bottom: .5rem;
     }
+
     .btn-primary {
-      background: #0f766e;
+      background: var(--accent);
       color: white;
+      padding-inline: 1.7rem;
+      box-shadow: 0 14px 28px rgba(14,165,233,.45);
     }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
     .btn-danger {
-      background: #fee2e2;
-      color: #b91c1c;
+      background: var(--danger-soft);
+      color: var(--danger);
       border: 1px solid #fecaca;
       font-size: .8rem;
       padding: .25rem .6rem;
+      box-shadow: none;
+      margin-top: 0;
     }
+
     .totaux {
       text-align: right;
       margin-top: .75rem;
       font-size: .9rem;
+      color: #111827;
     }
+
     .totaux span {
       display: block;
     }
+
+    #totalGlobal {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
     .footer-note {
       font-size: .75rem;
-      color: #6b7280;
-      margin-top: 1rem;
+      color: var(--text-muted);
+      margin-top: 1.2rem;
+      border-top: 1px dashed #e5e7eb;
+      padding-top: .7rem;
+    }
+
+    code {
+      background: #0b1120;
+      color: #e5e7eb;
+      padding: 2px 6px;
+      border-radius: .35rem;
+      font-size: .75rem;
+    }
+
+    .actions-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.3rem;
+    }
+
+    @media (max-width: 640px) {
+      main {
+        margin-inline: 0.75rem;
+        padding-inline: 1.1rem;
+      }
+      header h1 {
+        font-size: 1.3rem;
+      }
     }
   </style>
 </head>
 <body>
 <header>
-  <h1>Facture du Cabinet d'Avocat Maître Boni</h1>
+  <h1>Facture – Cabinet d'Avocat Maître Boni</h1>
   <div class="subtitle">Générateur de factures PDF</div>
 </header>
 
@@ -133,7 +255,7 @@
     <div class="grid">
       <div>
         <label for="villeDate">Lieu et date</label>
-        <input id="villeDate" type="text" placeholder="Natitingou, le 24/10/2025">
+        <input id="villeDate" type="text" placeholder="Bordeaux, le JJ/MM/AAAA">
       </div>
       <div>
         <label for="affaire">Affaire</label>
@@ -149,11 +271,11 @@
       </div>
       <div>
         <label for="numFacture">Numéro de facture</label>
-        <input id="numFacture" type="text" placeholder="25-10-5639">
+        <input id="numFacture" type="text" placeholder="FAC-AAAAMMJJ-XXX">
       </div>
       <div>
         <label for="tvaNum">TVA intracommunautaire</label>
-        <input id="tvaNum" type="text" value="FRxxxxxxxxxxxxx">
+        <input id="tvaNum" type="text" value="Cabinet non assujetti à la TVA" disabled>
       </div>
       <div>
         <label for="siret">N° SIRET</label>
@@ -186,18 +308,14 @@
   </section>
 
   <section aria-label="Lignes d’honoraires">
-    <h2>Lignes d’honoraires</h2>
+    <h2>Lignes d’honoraires (HT – TVA non applicable)</h2>
     <button type="button" class="btn btn-add" onclick="ajouterLigne()">+ Ajouter une ligne</button>
     <table id="tableLignes">
       <thead>
       <tr>
         <th>Libellé</th>
         <th>Date</th>
-        <th>Base HT</th>
-        <th>Exonéré</th>
-        <th>TVA %</th>
-        <th>TVA €</th>
-        <th>TTC</th>
+        <th>Montant (€)</th>
         <th></th>
       </tr>
       </thead>
@@ -206,20 +324,21 @@
       </tbody>
     </table>
     <div class="totaux">
-      <span>Total HT : <strong id="totalHT">0,00 €</strong></span>
-      <span>TVA : <strong id="totalTVA">0,00 €</strong></span>
-      <span><strong>Total TTC : <span id="totalTTC">0,00 €</span></strong></span>
+      <span>Total (TVA non applicable) :</span>
+      <span id="totalGlobal">0,00 €</span>
     </div>
   </section>
 
   <section aria-label="Texte de clôture">
     <h2>Texte de clôture</h2>
-    <textarea id="cloture">Le décompte laisse apparaître un solde dont règlement à vos bons soins.&#10;&#10;Votre bien dévoué.&#10;&#10;Maître Bio Bienvenu BONI</textarea>
+    <textarea id="cloture">Votre bien dévoué.</textarea>
   </section>
 
-  <button type="button" class="btn btn-primary" onclick="genererPDF()">
-    Générer la facture (PDF)
-  </button>
+  <div class="actions-bar">
+    <button type="button" class="btn btn-primary" onclick="genererPDF()">
+      Générer la facture (PDF)
+    </button>
+  </div>
 
   <p class="footer-note">
     Place l’image <code>entete-boni.jpg</code> dans le même dossier que ce fichier.  
@@ -228,6 +347,8 @@
 </main>
 
 <script>
+  let totalGlobal = 0;
+
   function formatEuro(n) {
     return n.toFixed(2).replace('.', ',') + ' €';
   }
@@ -239,11 +360,7 @@
     tr.innerHTML = `
       <td><input type="text" class="libelle" value="${data.libelle || ''}"></td>
       <td><input type="text" class="datePresta" value="${data.date || ''}"></td>
-      <td><input type="number" step="0.01" class="baseHT" value="${data.baseHT || ''}" oninput="recalculer()"></td>
-      <td><input type="number" step="0.01" class="exo" value="${data.exo || '0'}" oninput="recalculer()"></td>
-      <td><input type="number" step="0.01" class="tvaPct" value="${data.tvaPct || '20'}" oninput="recalculer()"></td>
-      <td class="tvaMontant">0,00 €</td>
-      <td class="ttcMontant">0,00 €</td>
+      <td><input type="number" step="0.01" class="montant" value="${data.montant || ''}" oninput="recalculer()"></td>
       <td><button type="button" class="btn btn-danger" onclick="supprimerLigne(this)">×</button></td>
     `;
     tbody.appendChild(tr);
@@ -255,28 +372,98 @@
   }
 
   function recalculer() {
-    let totalHT = 0, totalTVA = 0, totalTTC = 0;
+    let total = 0;
 
     document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
-      const baseHT = parseFloat(tr.querySelector('.baseHT').value || '0');
-      const exo = parseFloat(tr.querySelector('.exo').value || '0');
-      const tvaPct = parseFloat(tr.querySelector('.tvaPct').value || '0');
-
-      const baseTaxable = Math.max(baseHT - exo, 0);
-      const tva = baseTaxable * (tvaPct / 100);
-      const ttc = baseHT + tva;
-
-      tr.querySelector('.tvaMontant').textContent = formatEuro(tva);
-      tr.querySelector('.ttcMontant').textContent = formatEuro(ttc);
-
-      totalHT += baseHT;
-      totalTVA += tva;
-      totalTTC += ttc;
+      const montant = parseFloat(tr.querySelector('.montant').value.replace(',', '.') || '0');
+      if (!isNaN(montant)) {
+        total += montant;
+      }
     });
 
-    document.getElementById('totalHT').textContent = formatEuro(totalHT);
-    document.getElementById('totalTVA').textContent = formatEuro(totalTVA);
-    document.getElementById('totalTTC').textContent = formatEuro(totalTTC);
+    totalGlobal = total;
+    document.getElementById('totalGlobal').textContent = formatEuro(totalGlobal);
+  }
+
+  // Conversion nombre -> texte (français, simplifié mais correct pour la facture)
+  function nombreEnLettres(n) {
+    n = Math.round(n * 100) / 100; // 2 décimales max
+    const euros = Math.floor(n);
+    const cents = Math.round((n - euros) * 100);
+
+    function enLettresEntier(x) {
+      const unites = ['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf',
+        'dix','onze','douze','treize','quatorze','quinze','seize'];
+      const dizaines = ['','dix','vingt','trente','quarante','cinquante','soixante'];
+      if (x < 17) return unites[x];
+      if (x < 20) return 'dix-' + unites[x - 10];
+      if (x < 70) {
+        const d = Math.floor(x / 10);
+        const u = x % 10;
+        if (u === 0) return dizaines[d];
+        if (u === 1 && (d === 2 || d === 3 || d === 4 || d === 5 || d === 6))
+          return dizaines[d] + '-et-un';
+        return dizaines[d] + '-' + unites[u];
+      }
+      if (x < 80) { // 70-79
+        const u = x - 60;
+        if (u === 1) return 'soixante-et-onze';
+        return 'soixante-' + enLettresEntier(u);
+      }
+      if (x < 100) { // 80-99
+        const u = x - 80;
+        let base = 'quatre-vingt';
+        if (u === 0) return base + 's';
+        if (u === 1) return base + '-un';
+        return base + '-' + enLettresEntier(u);
+      }
+      if (x < 200) {
+        if (x === 100) return 'cent';
+        return 'cent ' + enLettresEntier(x - 100);
+      }
+      if (x < 1000) {
+        const c = Math.floor(x / 100);
+        const r = x % 100;
+        let cent = (c === 1) ? 'cent' : unites[c] + ' cents';
+        if (r === 0) return cent;
+        if (c > 1) cent = unites[c] + ' cent';
+        return cent + ' ' + enLettresEntier(r);
+      }
+      if (x < 1000000) {
+        const m = Math.floor(x / 1000);
+        const r = x % 1000;
+        let mille = (m === 1) ? 'mille' : enLettresEntier(m) + ' mille';
+        if (r === 0) return mille;
+        return mille + ' ' + enLettresEntier(r);
+      }
+      if (x < 1000000000) {
+        const M = Math.floor(x / 1000000);
+        const r = x % 1000000;
+        let million = (M === 1) ? 'un million' : enLettresEntier(M) + ' millions';
+        if (r === 0) return million;
+        return million + ' ' + enLettresEntier(r);
+      }
+      return x.toString();
+    }
+
+    let texte = '';
+    if (euros === 0) {
+      texte = 'zéro euro';
+    } else if (euros === 1) {
+      texte = 'un euro';
+    } else {
+      texte = enLettresEntier(euros) + ' euros';
+    }
+
+    if (cents > 0) {
+      if (cents === 1) {
+        texte += ' et un centime';
+      } else {
+        texte += ' et ' + enLettresEntier(cents) + ' centimes';
+      }
+    }
+
+    return texte;
   }
 
   function genererPDF() {
@@ -288,108 +475,146 @@
     entete.src = 'entete-boni.jpg'; // <= TON FICHIER JPG
 
     entete.onload = function () {
-      // 1) Entête en haut
-      // Ajuste 40, 20, 520, 90 si besoin (position / taille)
+      // 1) Entête en haut (ON NE TOUCHE PAS)
       doc.addImage(entete, 'JPEG', 0, 0, 595, 165);
 
-
       // Point de départ sous l’entête
-      let y = 130;
+      let y = 140;
 
-      // 2) Infos générales
+      // 2) Titre de la facture
+      const numFact = document.getElementById('numFacture').value || 'sans-numero';
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.text(`FACTURE N° ${numFact}`, margeG, y);
+      y += 20;
+
       doc.setFont('Helvetica', 'normal');
       doc.setFontSize(11);
 
+      // 3) Infos générales (à gauche)
       doc.text(document.getElementById('villeDate').value, margeG, y); y += 18;
-      doc.text("Nos réf : " + document.getElementById('nosRef').value, margeG, y); y += 14;
-      doc.text("Affaire : " + document.getElementById('affaire').value, margeG, y); y += 14;
-      doc.text("Vos réf : " + document.getElementById('vosRef').value, margeG, y); y += 14;
-      doc.text("Facture : " + document.getElementById('numFacture').value, margeG, y); y += 14;
-      doc.text("TVA intracommunautaire : " + document.getElementById('tvaNum').value, margeG, y); y += 14;
-      doc.text("N° SIRET : " + document.getElementById('siret').value, margeG, y); y += 24;
+      doc.text("Nos réf : " + (document.getElementById('nosRef').value || ''), margeG, y); y += 14;
+      doc.text("Affaire : " + (document.getElementById('affaire').value || ''), margeG, y); y += 14;
+      doc.text("Vos réf : " + (document.getElementById('vosRef').value || ''), margeG, y); y += 14;
+      doc.text("N° SIRET : " + (document.getElementById('siret').value || ''), margeG, y); y += 24;
+      doc.text("TVA : non applicable (cabinet non assujetti)", margeG, y); y += 24;
 
-      // 3) Destinataire à droite
-      let destY = 150;
+      // 4) Destinataire à droite
+      let destY = 160;
       const dest1 = document.getElementById('destNomLigne1').value;
       const dest2 = document.getElementById('destNomLigne2').value;
       const dest3 = document.getElementById('destNomLigne3').value;
 
-      const xRight = 360;
-      doc.setFont('Helvetica', 'bold');
-      if (dest1) doc.text(dest1, xRight, destY);
-      doc.setFont('Helvetica', 'normal');
-      destY += 14;
-      if (dest2) { doc.text(dest2, xRight, destY); destY += 12; }
-      if (dest3) { doc.text(dest3, xRight, destY); destY += 12; }
+      const xRight = 400;
+      if (dest1 || dest2 || dest3) {
+        doc.setFont('Helvetica', 'bold');
+        doc.text("À l'attention de :", xRight, destY); destY += 14;
+        if (dest1) {
+          doc.text(dest1, xRight, destY);
+          destY += 14;
+        }
+        doc.setFont('Helvetica', 'normal');
+        if (dest2) { doc.text(dest2, xRight, destY); destY += 12; }
+        if (dest3) { doc.text(dest3, xRight, destY); destY += 12; }
+      }
 
-      // 4) Introduction
+      // 5) Introduction
       const intro = document.getElementById('intro').value || "";
       const introLines = doc.splitTextToSize(intro, 500);
       doc.text(introLines, margeG, y);
-      y += introLines.length * 14 + 10;
+      y += introLines.length * 14 + 12;
 
-      // 5) Tableau des honoraires
+      // 6) Tableau des honoraires (sans TVA)
       const body = [];
       document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
         const libelle = tr.querySelector('.libelle').value;
         const dateP = tr.querySelector('.datePresta').value;
-        const baseHT = parseFloat(tr.querySelector('.baseHT').value || '0');
-        const exo = parseFloat(tr.querySelector('.exo').value || '0');
-        const tvaPct = parseFloat(tr.querySelector('.tvaPct').value || '0');
-        const baseTaxable = Math.max(baseHT - exo, 0);
-        const tvaMontant = baseTaxable * (tvaPct / 100);
-        const ttc = baseHT + tvaMontant;
+        const montant = parseFloat(tr.querySelector('.montant').value.replace(',', '.') || '0');
         body.push([
           libelle + (dateP ? " (" + dateP + ")" : ""),
-          baseHT.toFixed(2).replace('.', ','),
-          exo.toFixed(2).replace('.', ','),
-          tvaMontant.toFixed(2).replace('.', ','),
-          ttc.toFixed(2).replace('.', ',')
+          isNaN(montant) ? "0,00" : montant.toFixed(2).replace('.', ',')
         ]);
       });
 
-      const totalHTText = document.getElementById('totalHT').textContent.replace(' €', '');
-      const totalTVAText = document.getElementById('totalTVA').textContent.replace(' €', '');
-      const totalTTCText = document.getElementById('totalTTC').textContent.replace(' €', '');
+      const totalTexte = document.getElementById('totalGlobal').textContent.replace(' €', '');
+      const totalNombre = totalGlobal;
 
       if (body.length > 0) {
         doc.autoTable({
           startY: y,
-          head: [['Libellé', 'Base HT', 'Exo', 'TVA', 'TTC']],
+          head: [['Libellé', 'Montant (€)']],
           body: body,
           theme: 'grid',
           styles: { fontSize: 9 },
           headStyles: { fillColor: [243, 244, 246] }
         });
-        y = doc.lastAutoTable.finalY + 10;
+        y = doc.lastAutoTable.finalY + 12;
 
         doc.setFont('Helvetica', 'bold');
-        doc.text(`Total HT : ${totalHTText} €`, 400, y); y += 14;
-        doc.text(`TVA : ${totalTVAText} €`, 400, y); y += 14;
-        doc.text(`Total TTC : ${totalTTCText} €`, 400, y); y += 20;
+        doc.text(`Total (TVA non applicable) : ${totalTexte} €`, 350, y);
+        y += 20;
       }
 
-      // 6) Clôture
-      doc.setFont('Helvetica', 'normal');
-      const cloture = document.getElementById('cloture').value || "";
-      const clotureLines = doc.splitTextToSize(cloture, 500);
-      doc.text(clotureLines, margeG, y);
+      // 7) Décompte automatique en lettres
+      if (totalNombre > 0) {
+        doc.setFont('Helvetica', 'normal');
+        const montantLettre = nombreEnLettres(totalNombre).toUpperCase();
+        const phraseDec = `Le décompte laisse apparaître un solde de ${montantLettre} (${totalTexte} €), dont règlement à vos bons soins.`;
+        const decLines = doc.splitTextToSize(phraseDec, 500);
+        doc.text(decLines, margeG, y);
+        y += decLines.length * 14 + 14;
+      }
 
-      // 7) Sauvegarde
-      const numFact = document.getElementById('numFacture').value || 'facture';
+      // 8) Texte de clôture + signature à droite
+      const cloture = document.getElementById('cloture').value || "";
+      if (cloture.trim() !== "") {
+        const clotureLines = doc.splitTextToSize(cloture, 500);
+        doc.text(clotureLines, margeG, y);
+        y += clotureLines.length * 14 + 28;
+      } else {
+        y += 20;
+      }
+
+      // Signature à droite
+      doc.setFont('Helvetica', 'bold');
+      doc.text("Maître Bio Bienvenu BONI", 545, y, { align: 'right' });
+
+      // 9) Sauvegarde
       doc.save(`facture-${numFact}.pdf`);
     };
   }
 
-  // Une ligne par défaut pour tester
-  ajouterLigne({
-    libelle: "Assignation en référé TJ",
-    date: "",
-    baseHT: "91.12",
-    exo: "9.96",
-    tvaPct: "20"
+  // Initialisation automatique (date + numéro de facture + ligne test)
+  document.addEventListener('DOMContentLoaded', () => {
+    // Date & lieu automatiques (Bordeaux)
+    const now = new Date();
+    const jj = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const aaaa = now.getFullYear();
+    const dateTexte = `Bordeaux, le ${jj}/${mm}/${aaaa}`;
+
+    const villeDateInput = document.getElementById('villeDate');
+    if (!villeDateInput.value) {
+      villeDateInput.value = dateTexte;
+    }
+
+    // Numéro de facture automatique si vide
+    const numFactureInput = document.getElementById('numFacture');
+    if (!numFactureInput.value) {
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      const numAuto = `FAC-${aaaa}${mm}${jj}-${hh}${min}`;
+      numFactureInput.value = numAuto;
+    }
+
+    // Une ligne par défaut pour tester
+    ajouterLigne({
+      libelle: "Honoraires – Assignation en référé TJ",
+      date: "",
+      montant: "91.12"
+    });
+    recalculer();
   });
-  recalculer();
 </script>
 </body>
 </html>
