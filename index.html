@@ -288,17 +288,21 @@
     entete.src = 'entete-boni.jpg'; // <= TON FICHIER JPG
 
     entete.onload = function () {
-      // 1) Entête centrée en haut
+      // 1) Entête pleine largeur A4
       const pageWidth = 595; // Largeur A4 en points
-      const imgWidth = 400;  // Largeur réduite de l'image
-      const imgHeight = 80;  // Hauteur réduite de l'image
-      const imgX = (pageWidth - imgWidth) / 2; // Centrage horizontal
-      const imgY = 20; // Position verticale
+      const pageHeight = 842; // Hauteur A4 en points
+      
+      // Calcul des dimensions pour occuper toute la largeur
+      const imgWidth = pageWidth; // Pleine largeur A4
+      const imgHeight = (711 / 2550) * imgWidth; // Conserve le ratio de l'image originale
+      
+      const imgX = 0; // Début à gauche
+      const imgY = 0; // Début en haut
       
       doc.addImage(entete, 'JPEG', imgX, imgY, imgWidth, imgHeight);
 
       // Point de départ sous l'entête
-      let y = imgY + imgHeight + 20;
+      let y = imgHeight + 25; // Espacement après l'image
 
       // 2) Infos générales
       doc.setFont('Helvetica', 'normal');
@@ -313,7 +317,7 @@
       doc.text("N° SIRET : " + document.getElementById('siret').value, margeG, y); y += 24;
 
       // 3) Destinataire à droite
-      let destY = 150;
+      let destY = imgHeight + 45; // Position sous l'image + marge
       const dest1 = document.getElementById('destNomLigne1').value;
       const dest2 = document.getElementById('destNomLigne2').value;
       const dest3 = document.getElementById('destNomLigne3').value;
