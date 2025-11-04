@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Factures – Cabinet Maître Boni</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/jpg" href="entete-boni.jpg">
 
   <!-- Bootstrap (pour une base propre) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -263,39 +264,36 @@
       color: #4b5563;
     }
 
-    /* MODAL */
-
     /* MODAL – version opaque, sans conflit avec Bootstrap */
+    .boni-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.70);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      padding: 1rem;
+    }
 
-.boni-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.70); /* fond foncé derrière */
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 3000;
-  padding: 1rem;
-}
+    .boni-backdrop.show {
+      display: flex;
+    }
 
-.boni-backdrop.show {
-  display: flex;
-}
-
-.boni-modal {
-  width: 100%;
-  max-width: 900px;
-  max-height: 90vh;
-  background-color: #ffffff;          /* fond bien opaque */
-  color: #0f172a;
-  border-radius: 1rem;
-  box-shadow:
-    0 30px 60px rgba(15, 23, 42, .55),
-    0 0 0 1px rgba(148, 163, 184, 0.25);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+    .boni-modal {
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      background-color: #ffffff;
+      color: #0f172a;
+      border-radius: 1rem;
+      box-shadow:
+        0 30px 60px rgba(15, 23, 42, .55),
+        0 0 0 1px rgba(148, 163, 184, 0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
     .modal-header {
       padding: 1rem 1.5rem .6rem;
@@ -315,7 +313,7 @@
     .modal-body {
       padding: 1rem 1.5rem 1.2rem;
       overflow-y: auto;
-      background-color: #ffffff;            /* fond plein sous le texte */
+      background-color: #ffffff;
     }
 
     .modal-footer {
@@ -431,6 +429,9 @@
       overflow-y: auto;
       font-size: .9rem;
       background: #ffffff;
+      /* >>> pour se rapprocher d’un Word : on respecte tous les espaces, retours, tabulations */
+      white-space: pre-wrap;
+      tab-size: 4;
     }
 
     .editor:focus {
@@ -522,22 +523,22 @@
   <section aria-label="Liste des factures">
     <h2>Historique des factures</h2>
     <div class="table-responsive">
-    <table class="dashboard-table">
-      <thead>
-      <tr>
-        <th>Numéro</th>
-        <th>Date</th>
-        <th>Affaire</th>
-        <th>Destinataire</th>
-        <th>Montant</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody id="tbodyFactures">
-      <!-- Lignes remplies en JS -->
-      </tbody>
-    </table>
-    </div>  
+      <table class="dashboard-table">
+        <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Date</th>
+          <th>Affaire</th>
+          <th>Destinataire</th>
+          <th>Montant</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="tbodyFactures">
+        <!-- Lignes remplies en JS -->
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <p class="footer-note">
@@ -626,7 +627,8 @@
       <div class="step" id="step3" style="display:none">
         <h2>Texte de la lettre</h2>
         <p style="font-size:.8rem;color:var(--text-muted);margin-top:-.2rem;margin-bottom:.4rem;">
-          Vous pouvez mettre du gras, italique, listes… comme dans un petit Word.
+          Vous pouvez mettre du gras, italique, listes… comme dans un petit Word.  
+          La touche <strong>Tab</strong> fonctionne aussi pour les tabulations.
         </p>
         <div class="editor-container">
           <div class="editor-toolbar">
@@ -704,7 +706,6 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
 
     if (count > 0) {
       const last = factures.reduce((a, b) => (a.id > b.id ? a : b));
-      // on enlève "Bordeaux, le " pour n'afficher que la date
       const dateTexte = (last.dateTexte || '').replace('Bordeaux, le ', '');
       lastEl.textContent = dateTexte || '—';
     } else {
@@ -833,7 +834,6 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
 
 J’ai le plaisir de vous adresser en retour l’expédition de …`;
 
-    // Reset lignes
     const tbody = document.querySelector('#tableLignes tbody');
     tbody.innerHTML = '';
     ajouterLigne({
@@ -890,6 +890,19 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     return tmp.innerText || tmp.textContent || '';
   }
 
+  // >>> Gestion de la touche Tab dans l’éditeur pour faire de vraies « tabulations »
+  function initEditorTabSupport() {
+    const editor = document.getElementById('editorTexte');
+    if (!editor) return;
+    editor.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        // on insère 4 espaces (tabulation “Word-like”)
+        document.execCommand('insertText', false, '    ');
+      }
+    });
+  }
+
   /* ---------- RECAP & ENREGISTREMENT ---------- */
 
   function construireRecapitulatif() {
@@ -935,7 +948,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     const dest2 = document.getElementById('destNomLigne2').value;
     const dest3 = document.getElementById('destNomLigne3').value;
     const texteHTML = document.getElementById('editorTexte').innerHTML;
-    const texteBrut = getTexteBrutDepuisHTML(texteHTML);
+    const texteBrut = getTexteBrutDepuisHTML(texteHTML); // on garde EXACTEMENT le texte tapé (lignes, tabulations => espaces)
 
     const lignes = [];
     document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
@@ -1048,24 +1061,28 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     return texte;
   }
 
+  /* ---------- NORMALISATION TEXTE POUR LE PDF ---------- */
+
+  function normaliserTextePourPdf(texte) {
+    // On convertit les tabulations en 4 espaces pour être sûr qu’elles s’affichent bien
+    return texte.replace(/\t/g, '    ');
+  }
+
   /* ---------- GENERATION PDF ---------- */
 
   function genererPDF(facture) {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: 'pt', format: 'A4' }); // 595 x 842 pts approx
+    const doc = new jsPDF({ unit: 'pt', format: 'A4' });
     const margeG = 50;
 
     const entete = new Image();
-    entete.src = 'entete-boni.jpg'; // ENTÊTE INCHANGÉE
+    entete.src = 'entete-boni.jpg';
 
     entete.onload = function () {
-      // Image d'entête (inchangée)
       doc.addImage(entete, 'JPEG', 0, 0, 595, 165);
 
-      // On pousse le contenu bien plus bas pour ne pas rentrer dans l'image
       let y = 210;
 
-      // Titre facture d'honoraires centré
       doc.setFont('Helvetica', 'bold');
       doc.setFontSize(13);
       doc.text("FACTURE D'HONORAIRES", 595 / 2, y, { align: 'center' });
@@ -1097,11 +1114,9 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
         }
       }
 
-      // Date juste en dessous du destinataire
       destY += 16;
       doc.text(facture.dateTexte, xRight, destY);
 
-      // Infos générales en dessous à gauche
       let yInfos = destY + 24;
       doc.text("Nos réf : " + (facture.nosRef || ''), margeG, yInfos); yInfos += 14;
       doc.text("Affaire : " + (facture.affaire || ''), margeG, yInfos); yInfos += 14;
@@ -1110,12 +1125,22 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
 
       let yCourant = yInfos;
 
-      // Texte de la lettre
-      const texteIntro = facture.texteBrut || "";
+      // >>> Texte de la lettre : on respecte LIGNE PAR LIGNE ce que tu as tapé (avec tabulations)
+      const texteIntro = normaliserTextePourPdf(facture.texteBrut || "");
       if (texteIntro.trim().length > 0) {
-        const introLines = doc.splitTextToSize(texteIntro, 500);
-        doc.text(introLines, margeG, yCourant);
-        yCourant += introLines.length * 14 + 16;
+        const paragraphs = texteIntro.split(/\r?\n/);
+        paragraphs.forEach(p => {
+          const trimmed = p.replace(/\s+$/,''); // on évite des espaces inutiles en fin
+          const lines = doc.splitTextToSize(trimmed, 500);
+          if (lines.length) {
+            doc.text(lines, margeG, yCourant);
+            yCourant += lines.length * 14;
+          } else {
+            // ligne vide => saut de ligne
+            yCourant += 14;
+          }
+        });
+        yCourant += 16;
       }
 
       // Tableau des honoraires
@@ -1156,25 +1181,31 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
         });
         yCourant = doc.lastAutoTable.finalY + 14;
 
-        // Ligne de total à droite
         doc.setFont('Helvetica', 'bold');
         doc.setDrawColor(0,0,0);
         doc.line(335, yCourant - 10, 545, yCourant - 10);
-        doc.text(`Total : ${facture.totalMontant.toFixed(2).replace('.', ',')} €`, 545, yCourant, { align: 'right' });
+        doc.text(
+          `Total : ${facture.totalMontant.toFixed(2).replace('.', ',')} €`,
+          545,
+          yCourant,
+          { align: 'right' }
+        );
         yCourant += 22;
       }
 
-      // Décompte automatisé en lettres
+      // Décompte en lettres
       if (facture.totalMontant > 0) {
         doc.setFont('Helvetica', 'normal');
         const montantLettre = nombreEnLettres(facture.totalMontant).toUpperCase();
-        const phraseDec = `Le décompte laisse apparaître un solde de ${montantLettre} (${facture.totalMontant.toFixed(2).replace('.', ',')} €), dont règlement à vos bons soins.`;
+        const phraseDec =
+          `Le décompte laisse apparaître un solde de ${montantLettre} ` +
+          `(${facture.totalMontant.toFixed(2).replace('.', ',')} €), dont règlement à vos bons soins.`;
         const decLines = doc.splitTextToSize(phraseDec, 500);
         doc.text(decLines, margeG, yCourant);
         yCourant += decLines.length * 14 + 28;
       }
 
-      // Signature à droite
+      // Signature
       doc.setFont('Helvetica', 'bold');
       doc.text("Maître Bio Bienvenu BONI", 545, yCourant, { align: 'right' });
       yCourant += 14;
@@ -1190,11 +1221,8 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
   document.addEventListener('DOMContentLoaded', () => {
     chargerFactures();
     rafraichirTableau();
+    initEditorTabSupport(); // >>> activation de la touche Tab dans l’éditeur
   });
 </script>
 </body>
 </html>
-
-
-
-
