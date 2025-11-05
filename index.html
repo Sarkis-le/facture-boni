@@ -91,7 +91,7 @@
       background: var(--accent);
     }
 
-    /* Boutons – on surclasse Bootstrap pour garder ton style */
+    /* Boutons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -264,7 +264,7 @@
       color: #4b5563;
     }
 
-    /* MODAL – version opaque, sans conflit avec Bootstrap */
+    /* MODAL */
     .boni-backdrop {
       position: fixed;
       inset: 0;
@@ -429,7 +429,6 @@
       overflow-y: auto;
       font-size: .9rem;
       background: #ffffff;
-      /* >>> pour se rapprocher d’un Word : on respecte tous les espaces, retours, tabulations */
       white-space: pre-wrap;
       tab-size: 4;
     }
@@ -540,8 +539,6 @@
       </table>
     </div>
   </section>
-
-  
 </main>
 
 <!-- MODAL CREATION FACTURE -->
@@ -569,12 +566,8 @@
             <input id="affaire" type="text" placeholder="DIOME Modou / LEBLOND Jennifer">
           </div>
           <div>
-            <label for="nosRef">Nos références</label>
-            <input id="nosRef" type="text" placeholder="Cor : 8257, MD : 133974 - FD">
-          </div>
-          <div>
-            <label for="vosRef">Vos références</label>
-            <input id="vosRef" type="text" placeholder="">
+            <label for="reference">Référence (numéro de facture)</label>
+            <input id="reference" type="text" placeholder="Générée automatiquement" readonly>
           </div>
         </div>
 
@@ -624,8 +617,8 @@
       <div class="step" id="step3" style="display:none">
         <h2>Texte de la lettre</h2>
         <p style="font-size:.8rem;color:var(--text-muted);margin-top:-.2rem;margin-bottom:.4rem;">
-          Vous pouvez mettre du gras, italique, listes… comme dans un petit Word.  
-          La touche <strong>Tab</strong> fonctionne aussi pour les tabulations.
+          Vous pouvez laisser cette partie vide si vous n'avez rien à ajouter.  
+          Vous pouvez aussi mettre du gras, italique, listes… comme dans un petit Word.
         </p>
         <div class="editor-container">
           <div class="editor-toolbar">
@@ -664,7 +657,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
 
 <script>
   const STORAGE_KEY = 'factures_boni';
-  const SIRET = 'xxxxxxxxxxxxx'; // À adapter une fois pour toutes
+  const SIRET = '93926261400018'; // SIRET fixé
   let factures = [];
   let currentStep = 1;
   let totalGlobal = 0;
@@ -817,12 +810,15 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
     const numero = `FAC-${aaaa}${mm}${jj}-${hh}${min}`;
     const badge = document.getElementById('badgeAuto');
     badge.textContent = `Date : ${dateTexte} – N° : ${numero}`;
+
+    // mettre la référence = numéro de facture dans le champ lecture seule
+    const refInput = document.getElementById('reference');
+    if (refInput) refInput.value = numero;
   }
 
   function resetForm() {
     document.getElementById('affaire').value = '';
-    document.getElementById('nosRef').value = '';
-    document.getElementById('vosRef').value = '';
+    document.getElementById('reference').value = '';
     document.getElementById('destNomLigne1').value = '';
     document.getElementById('destNomLigne2').value = '';
     document.getElementById('destNomLigne3').value = '';
@@ -887,14 +883,12 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     return tmp.innerText || tmp.textContent || '';
   }
 
-  // >>> Gestion de la touche Tab dans l’éditeur pour faire de vraies « tabulations »
   function initEditorTabSupport() {
     const editor = document.getElementById('editorTexte');
     if (!editor) return;
     editor.addEventListener('keydown', function (e) {
       if (e.key === 'Tab') {
         e.preventDefault();
-        // on insère 4 espaces (tabulation “Word-like”)
         document.execCommand('insertText', false, '    ');
       }
     });
@@ -904,8 +898,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
 
   function construireRecapitulatif() {
     const affaire = document.getElementById('affaire').value;
-    const nosRef = document.getElementById('nosRef').value;
-    const vosRef = document.getElementById('vosRef').value;
+    const reference = document.getElementById('reference').value;
     const dest1 = document.getElementById('destNomLigne1').value;
     const dest2 = document.getElementById('destNomLigne2').value;
     const dest3 = document.getElementById('destNomLigne3').value;
@@ -914,8 +907,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     const recap = document.getElementById('recap');
     recap.innerHTML = `
       <p><strong>Affaire :</strong> ${affaire || '-'}</p>
-      <p><strong>Nos réf :</strong> ${nosRef || '-'}<br>
-      <strong>Vos réf :</strong> ${vosRef || '-'}</p>
+      <p><strong>Référence :</strong> ${reference || '-'}</p>
       <p><strong>Destinataire :</strong><br>
       ${(dest1 || '')}<br>${(dest2 || '')}<br>${(dest3 || '')}</p>
       <p><strong>Nombre de lignes d’honoraires :</strong> ${document.querySelectorAll('#tableLignes tbody tr').length}</p>
@@ -939,13 +931,11 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     const numero = `FAC-${aaaa}${mm}${jj}-${hh}${min}`;
 
     const affaire = document.getElementById('affaire').value;
-    const nosRef = document.getElementById('nosRef').value;
-    const vosRef = document.getElementById('vosRef').value;
     const dest1 = document.getElementById('destNomLigne1').value;
     const dest2 = document.getElementById('destNomLigne2').value;
     const dest3 = document.getElementById('destNomLigne3').value;
     const texteHTML = document.getElementById('editorTexte').innerHTML;
-    const texteBrut = getTexteBrutDepuisHTML(texteHTML); // on garde EXACTEMENT le texte tapé (lignes, tabulations => espaces)
+    const texteBrut = getTexteBrutDepuisHTML(texteHTML);
 
     const lignes = [];
     document.querySelectorAll('#tableLignes tbody tr').forEach(tr => {
@@ -965,8 +955,6 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
       numero,
       dateTexte,
       affaire,
-      nosRef,
-      vosRef,
       dest1,
       dest2,
       dest3,
@@ -1061,7 +1049,6 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
   /* ---------- NORMALISATION TEXTE POUR LE PDF ---------- */
 
   function normaliserTextePourPdf(texte) {
-    // On convertit les tabulations en 4 espaces pour être sûr qu’elles s’affichent bien
     return texte.replace(/\t/g, '    ');
   }
 
@@ -1115,25 +1102,23 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
       doc.text(facture.dateTexte, xRight, destY);
 
       let yInfos = destY + 24;
-      doc.text("Nos réf : " + (facture.nosRef || ''), margeG, yInfos); yInfos += 14;
+      doc.text("Référence : " + (facture.numero || ''), margeG, yInfos); yInfos += 14;
       doc.text("Affaire : " + (facture.affaire || ''), margeG, yInfos); yInfos += 14;
-      doc.text("Vos réf : " + (facture.vosRef || ''), margeG, yInfos); yInfos += 14;
       doc.text("N° SIRET : " + (facture.siret || ''), margeG, yInfos); yInfos += 24;
 
       let yCourant = yInfos;
 
-      // >>> Texte de la lettre : on respecte LIGNE PAR LIGNE ce que tu as tapé (avec tabulations)
+      // Texte de la lettre (facultatif)
       const texteIntro = normaliserTextePourPdf(facture.texteBrut || "");
       if (texteIntro.trim().length > 0) {
         const paragraphs = texteIntro.split(/\r?\n/);
         paragraphs.forEach(p => {
-          const trimmed = p.replace(/\s+$/,''); // on évite des espaces inutiles en fin
+          const trimmed = p.replace(/\s+$/,'');
           const lines = doc.splitTextToSize(trimmed, 500);
           if (lines.length) {
             doc.text(lines, margeG, yCourant);
             yCourant += lines.length * 14;
           } else {
-            // ligne vide => saut de ligne
             yCourant += 14;
           }
         });
@@ -1209,6 +1194,19 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
       doc.setFont('Helvetica', 'normal');
       doc.text("Avocat au barreau de Bordeaux", 545, yCourant, { align: 'right' });
 
+      // Pied de page bancaire (IBAN / BIC / RIB / domiciliation)
+      doc.setFontSize(8);
+      doc.setTextColor(80);
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const footerY = pageHeight - 60;
+
+      doc.text("Titulaire du compte : M. BONI Bio Bienvenu", margeG, footerY);
+      doc.text("IBAN : FR76 4061 8803 1200 0400 8806 742", margeG, footerY + 10);
+      doc.text("BIC / SWIFT : BOUS FRPP XXX", margeG, footerY + 20);
+      doc.text("Code banque 40618 – Code guichet 80312 – N° de compte 00040088067 – Clé RIB 42", margeG, footerY + 30);
+      doc.text("Domiciliation : Boursobank – 44 rue Traversière – 92772 BOULOGNE-BILLANCOURT CEDEX FRANCE", margeG, footerY + 40);
+
+      doc.setTextColor(0);
       doc.save(`facture-${facture.numero}.pdf`);
     };
   }
@@ -1218,12 +1216,8 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
   document.addEventListener('DOMContentLoaded', () => {
     chargerFactures();
     rafraichirTableau();
-    initEditorTabSupport(); // >>> activation de la touche Tab dans l’éditeur
+    initEditorTabSupport();
   });
 </script>
 </body>
 </html>
-
-
-
-
