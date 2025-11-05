@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="icon" type="image/png" href="logo_cabinet.png">
 
-  <!-- Bootstrap (pour une base propre) -->
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- jsPDF + autotable -->
@@ -28,9 +28,7 @@
       --radius-xl: 0.9rem;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -91,7 +89,6 @@
       background: var(--accent);
     }
 
-    /* Boutons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -120,9 +117,7 @@
       border: none;
     }
 
-    .btn-primary:hover {
-      background: var(--accent-dark);
-    }
+    .btn-primary:hover { background: var(--accent-dark); }
 
     .btn-soft {
       background: #f3f4f6;
@@ -169,7 +164,6 @@
       color: var(--text-muted);
     }
 
-    /* Cartes de stats */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
@@ -245,13 +239,9 @@
       background: #f3f4f6;
     }
 
-    .dashboard-table tbody tr:hover {
-      background: #f9fafb;
-    }
+    .dashboard-table tbody tr:hover { background: #f9fafb; }
 
-    .dashboard-table td:last-child {
-      text-align: right;
-    }
+    .dashboard-table td:last-child { text-align: right; }
 
     .badge {
       display: inline-flex;
@@ -264,7 +254,6 @@
       color: #4b5563;
     }
 
-    /* MODAL */
     .boni-backdrop {
       position: fixed;
       inset: 0;
@@ -276,9 +265,7 @@
       padding: 1rem;
     }
 
-    .boni-backdrop.show {
-      display: flex;
-    }
+    .boni-backdrop.show { display: flex; }
 
     .boni-modal {
       width: 100%;
@@ -357,9 +344,7 @@
       background: #d1d5db;
     }
 
-    .step-indicator .current .dot {
-      background: var(--accent);
-    }
+    .step-indicator .current .dot { background: var(--accent); }
 
     .grid {
       display: grid;
@@ -418,9 +403,7 @@
       color: #4b5563;
     }
 
-    .editor-toolbar button:hover {
-      background: #e5e7eb;
-    }
+    .editor-toolbar button:hover { background: #e5e7eb; }
 
     .editor {
       min-height: 140px;
@@ -433,9 +416,7 @@
       tab-size: 4;
     }
 
-    .editor:focus {
-      outline: none;
-    }
+    .editor:focus { outline: none; }
 
     .totaux {
       text-align: right;
@@ -444,29 +425,11 @@
       color: #111827;
     }
 
-    .totaux span {
-      display: block;
-    }
+    .totaux span { display: block; }
 
     #totalGlobal {
       font-size: 1rem;
       font-weight: 700;
-    }
-
-    .footer-note {
-      font-size: .75rem;
-      color: var(--text-muted);
-      margin-top: 1.2rem;
-      border-top: 1px dashed #e5e7eb;
-      padding-top: .7rem;
-    }
-
-    code {
-      background: #0b1120;
-      color: #e5e7eb;
-      padding: 2px 6px;
-      border-radius: .35rem;
-      font-size: .75rem;
     }
 
     @media (max-width: 640px) {
@@ -474,12 +437,8 @@
         margin-inline: 0.75rem;
         padding-inline: 1.1rem;
       }
-      header h1 {
-        font-size: 1.3rem;
-      }
-      .modal {
-        max-width: 100%;
-      }
+      header h1 { font-size: 1.3rem; }
+      .modal { max-width: 100%; }
     }
   </style>
 </head>
@@ -500,7 +459,6 @@
     </button>
   </div>
 
-  <!-- Cartes de statistiques -->
   <div class="stats-row">
     <div class="stat-card">
       <div class="stat-label">Factures enregistrées</div>
@@ -549,6 +507,7 @@
       <h3 id="modalTitle">Nouvelle facture d'honoraires</h3>
       <button type="button" class="btn btn-soft btn-sm" onclick="fermerModal()">Fermer</button>
     </div>
+
     <div class="modal-body">
       <div class="step-indicator">
         <span class="current" id="stepLabel1"><span class="dot"></span> Étape 1 : Infos</span>
@@ -615,10 +574,9 @@
 
       <!-- Étape 3 -->
       <div class="step" id="step3" style="display:none">
-        <h2>Texte de la lettre</h2>
+        <h2>Texte de la lettre (facultatif)</h2>
         <p style="font-size:.8rem;color:var(--text-muted);margin-top:-.2rem;margin-bottom:.4rem;">
-          Vous pouvez laisser cette partie vide si vous n'avez rien à ajouter.  
-          Vous pouvez aussi mettre du gras, italique, listes… comme dans un petit Word.
+          Vous pouvez laisser cette partie vide si vous n'avez rien à ajouter.
         </p>
         <div class="editor-container">
           <div class="editor-toolbar">
@@ -645,6 +603,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
       </div>
 
     </div>
+
     <div class="modal-footer">
       <button type="button" class="btn btn-soft btn-sm" id="btnPrev" onclick="changerEtape(-1)" disabled>Étape précédente</button>
       <div style="display:flex;gap:.5rem;align-items:center;">
@@ -657,12 +616,12 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
 
 <script>
   const STORAGE_KEY = 'factures_boni';
-  const SIRET = '93926261400018'; // SIRET fixé
+  const SIRET = '93926261400018'; // SIRET fixe
   let factures = [];
   let currentStep = 1;
   let totalGlobal = 0;
 
-  /* ---------- UTIL LOCALSTORAGE ---------- */
+  /* ---------- LOCALSTORAGE ---------- */
 
   function chargerFactures() {
     try {
@@ -740,12 +699,23 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
 
       const tdAct = document.createElement('td');
       tdAct.style.textAlign = 'right';
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn btn-soft btn-sm';
-      btn.textContent = 'PDF';
-      btn.onclick = () => genererPDF(f);
-      tdAct.appendChild(btn);
+
+      // Bouton PDF
+      const btnPdf = document.createElement('button');
+      btnPdf.type = 'button';
+      btnPdf.className = 'btn btn-soft btn-sm';
+      btnPdf.textContent = 'PDF';
+      btnPdf.style.marginRight = '0.4rem';
+      btnPdf.onclick = () => genererPDF(f);
+      tdAct.appendChild(btnPdf);
+
+      // Bouton Supprimer
+      const btnDel = document.createElement('button');
+      btnDel.type = 'button';
+      btnDel.className = 'btn btn-danger btn-sm';
+      btnDel.textContent = 'Supprimer';
+      btnDel.onclick = () => supprimerFacture(f.id);
+      tdAct.appendChild(btnDel);
 
       tr.appendChild(tdNum);
       tr.appendChild(tdDate);
@@ -760,13 +730,22 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
     majStats();
   }
 
+  function supprimerFacture(id) {
+    if (!confirm("Confirmez-vous la suppression définitive de cette facture ?")) {
+      return;
+    }
+    factures = factures.filter(f => f.id !== id);
+    sauvegarderFactures();
+    rafraichirTableau();
+  }
+
   /* ---------- MODAL & ÉTAPES ---------- */
 
   function ouvrirModal() {
     document.getElementById('backdrop').classList.add('show');
     currentStep = 1;
-    majEtapes();
     resetForm();
+    majEtapes();
   }
 
   function fermerModal() {
@@ -811,7 +790,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
     const badge = document.getElementById('badgeAuto');
     badge.textContent = `Date : ${dateTexte} – N° : ${numero}`;
 
-    // mettre la référence = numéro de facture dans le champ lecture seule
+    // Référence = numéro de facture
     const refInput = document.getElementById('reference');
     if (refInput) refInput.value = numero;
   }
@@ -871,7 +850,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     document.getElementById('totalGlobal').textContent = formatEuro(totalGlobal);
   }
 
-  /* ---------- ÉDITEUR DE TEXTE ---------- */
+  /* ---------- ÉDITEUR ---------- */
 
   function execCmd(cmd) {
     document.execCommand(cmd, false, null);
@@ -972,7 +951,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     fermerModal();
   }
 
-  /* ---------- NOMBRE EN LETTRES (FR) ---------- */
+  /* ---------- NOMBRE EN LETTRES ---------- */
 
   function nombreEnLettres(n) {
     n = Math.round(n * 100) / 100;
@@ -1046,8 +1025,6 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     return texte;
   }
 
-  /* ---------- NORMALISATION TEXTE POUR LE PDF ---------- */
-
   function normaliserTextePourPdf(texte) {
     return texte.replace(/\t/g, '    ');
   }
@@ -1113,7 +1090,7 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
       if (texteIntro.trim().length > 0) {
         const paragraphs = texteIntro.split(/\r?\n/);
         paragraphs.forEach(p => {
-          const trimmed = p.replace(/\s+$/,'');
+          const trimmed = p.replace(/\s+$/, '');
           const lines = doc.splitTextToSize(trimmed, 500);
           if (lines.length) {
             doc.text(lines, margeG, yCourant);
@@ -1194,35 +1171,30 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
       doc.setFont('Helvetica', 'normal');
       doc.text("Avocat au barreau de Bordeaux", 545, yCourant, { align: 'right' });
 
-      // Pied de page bancaire (IBAN / BIC / RIB / domiciliation)
-     // Pied de page bancaire (IBAN / BIC / RIB / domiciliation)
-doc.setFontSize(8);
-doc.setTextColor(80);
+      // Pied de page bancaire (avec trait de séparation)
+      doc.setFontSize(8);
+      doc.setTextColor(80);
 
-const pageHeight = doc.internal.pageSize.getHeight();
-const pageWidth  = doc.internal.pageSize.getWidth();
-const footerY    = pageHeight - 60;
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const pageWidth  = doc.internal.pageSize.getWidth();
+      const footerY    = pageHeight - 60;
 
-// --- TRAIT DE SÉPARATION DU PIED DE PAGE ---
-doc.setDrawColor(0, 0, 0);          // noir
-doc.setLineWidth(0.5);              // épaisseur fine
-doc.line(margeG, footerY - 12, pageWidth - margeG, footerY - 12);
+      // Trait de séparation du pied de page
+      doc.setDrawColor(0, 0, 0);
+      doc.setLineWidth(0.5);
+      doc.line(margeG, footerY - 12, pageWidth - margeG, footerY - 12);
 
-// Texte du pied de page
-
-doc.text("IBAN : FR76 4061 8803 1200 0400 8806 742", margeG, footerY + 10);
-doc.text("BIC / SWIFT : BOUS FRPP XXX", margeG, footerY + 20);
-doc.text("Titulaire du compte : M. BONI Bio Bienvenu", margeG, footerY);
-
-
-      
+      // Texte bancaires
+      doc.text("Titulaire du compte : M. BONI Bio Bienvenu", margeG, footerY);
+      doc.text("IBAN : FR76 4061 8803 1200 0400 8806 742", margeG, footerY + 10);
+      doc.text("BIC / SWIFT : BOUS FRPP XXX", margeG, footerY + 20);
+      doc.text("Code banque 40618 – Code guichet 80312 – N° de compte 00040088067 – Clé RIB 42", margeG, footerY + 30);
+      doc.text("Domiciliation : Boursobank – 44 rue Traversière – 92772 BOULOGNE-BILLANCOURT CEDEX FRANCE", margeG, footerY + 40);
 
       doc.setTextColor(0);
       doc.save(`facture-${facture.numero}.pdf`);
     };
   }
-
-  /* ---------- INIT ---------- */
 
   document.addEventListener('DOMContentLoaded', () => {
     chargerFactures();
@@ -1232,5 +1204,3 @@ doc.text("Titulaire du compte : M. BONI Bio Bienvenu", margeG, footerY);
 </script>
 </body>
 </html>
-
-
