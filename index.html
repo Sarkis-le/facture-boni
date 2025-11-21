@@ -498,7 +498,8 @@
       </table>
     </div>
   </section>
-    <section aria-label="Guide facture d'honoraires" class="mt-4">
+
+  <section aria-label="Guide facture d'honoraires" class="mt-4">
     <h2>Comment générer une facture d’honoraires d’avocat&nbsp;?</h2>
     <p>
       La facture d’honoraires est un document essentiel dans la relation entre l’avocat et son client.
@@ -549,10 +550,11 @@
       technique fiable pour éditer des factures d’honoraires structurées, lisibles et archivables.
     </p>
   </section>
-<p style="margin-top:1rem;font-size:0.85rem;">
-  Pour en savoir plus, consultez notre
-  <a href="guide-facture-avocat.html">guide complet sur la facture d’honoraires d’avocat</a>.
-</p>
+
+  <p style="margin-top:1rem;font-size:0.85rem;">
+    Pour en savoir plus, consultez notre
+    <a href="guide-facture-avocat.html">guide complet sur la facture d’honoraires d’avocat</a>.
+  </p>
 
 </main>
 
@@ -677,6 +679,17 @@ J’ai le plaisir de vous adresser en retour l’expédition de …
   let factures = [];
   let currentStep = 1;
   let totalGlobal = 0;
+
+  /* ---------- HELPER IMAGES ---------- */
+
+  function chargerImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
 
   /* ---------- LOCALSTORAGE ---------- */
 
@@ -1086,27 +1099,33 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
     return texte.replace(/\t/g, '    ');
   }
 
-  /* ---------- GENERATION PDF ---------- */
+  /* ---------- GENERATION PDF AVEC SIGNATURE ---------- */
 
   function genererPDF(facture) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: 'pt', format: 'A4' });
     const margeG = 50;
 
-    const entete = new Image();
-    entete.src = 'entete-boni.jpg';
+    // On charge l'en-tête + la signature électronique
+    Promise.all([
+      chargerImage('entete-boni.jpg'),
+      chargerImage('signature-boni.png')
+    ]).then(([entete, signature]) => {
 
-    entete.onload = function () {
+      const pageWidth  = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      /* --- ENTÊTE --- */
       doc.addImage(entete, 'JPEG', 0, 0, 595, 165);
 
       let y = 210;
 
       doc.setFont('Helvetica', 'bold');
       doc.setFontSize(13);
-      doc.text("FACTURE D'HONORAIRES", 595 / 2, y, { align: 'center' });
+      doc.text("FACTURE D'HONORAIRES", pageWidth / 2, y, { align: 'center' });
       y += 18;
       doc.setFontSize(12);
-      doc.text(`N° ${facture.numero}`, 595 / 2, y, { align: 'center' });
+      doc.text(`N° ${facture.numero}`, pageWidth / 2, y, { align: 'center' });
       y += 30;
 
       doc.setFont('Helvetica', 'normal');
@@ -1221,27 +1240,34 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
         yCourant += decLines.length * 14 + 28;
       }
 
-      // Signature
+      /* --- SIGNATURE ÉLECTRONIQUE + NOM --- */
+      // On place l'image de signature à droite, juste au-dessus du nom
+      const sigWidth  = 130;   // largeur en points (adapter si besoin)
+      const sigHeight = 55;    // hauteur en points
+      const sigX      = pageWidth - sigWidth - 50;
+      const sigY      = yCourant;  // juste après le texte
+
+      doc.addImage(signature, 'PNG', sigX, sigY, sigWidth, sigHeight);
+
+      // Texte sous la signature
+      yCourant = sigY + sigHeight + 10;
+
       doc.setFont('Helvetica', 'bold');
-      doc.text("Maître Bio Bienvenu BONI", 545, yCourant, { align: 'right' });
+      doc.text("Maître Bio Bienvenu BONI", pageWidth - 50, yCourant, { align: 'right' });
       yCourant += 14;
       doc.setFont('Helvetica', 'normal');
-      doc.text("Avocat au barreau de Bordeaux", 545, yCourant, { align: 'right' });
+      doc.text("Avocat au barreau de Bordeaux", pageWidth - 50, yCourant, { align: 'right' });
 
-      // Pied de page bancaire (avec trait de séparation)
+      // Pied de page bancaire
       doc.setFontSize(8);
       doc.setTextColor(80);
 
-      const pageHeight = doc.internal.pageSize.getHeight();
-      const pageWidth  = doc.internal.pageSize.getWidth();
-      const footerY    = pageHeight - 60;
+      const footerY = pageHeight - 60;
 
-      // Trait de séparation du pied de page
       doc.setDrawColor(0, 0, 0);
       doc.setLineWidth(0.5);
       doc.line(margeG, footerY - 12, pageWidth - margeG, footerY - 12);
 
-      // Texte bancaires
       doc.text("Titulaire du compte : M. BONI Bio Bienvenu", margeG, footerY);
       doc.text("IBAN : FR76 4061 8803 1200 0400 8806 742", margeG, footerY + 10);
       doc.text("BIC / SWIFT : BOUS FRPP XXX", margeG, footerY + 20);
@@ -1250,7 +1276,10 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
 
       doc.setTextColor(0);
       doc.save(`facture-${facture.numero}.pdf`);
-    };
+    }).catch(err => {
+      console.error("Erreur lors du chargement des images pour le PDF :", err);
+      alert("Impossible de charger l'en-tête ou la signature pour le PDF.");
+    });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -1261,6 +1290,3 @@ J’ai le plaisir de vous adresser en retour l’expédition de …`;
 </script>
 </body>
 </html>
-
-
-
